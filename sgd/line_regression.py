@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from tqdm.auto import trange, tqdm
 
 
-def get_line_data(nsamples=1000):
+def get_line_data(nsamples=1000, seed=42):
     '''
     generates a random vector $x \in [-0.5, 1.5]$ 
     evaluate it in a linear function $y = 2x$
@@ -13,6 +13,8 @@ def get_line_data(nsamples=1000):
     ref_slope = 2.0
     ref_offset = 0.0
     ground_truth = [ref_slope, ref_offset]
+
+    np.random.seed(seed)
     noise = np.random.random((nsamples, 1)) - 0.5    # -0.5 to center the noise
     x_train = np.random.random((nsamples, 1)) - 0.5  # -0.5 to center x around 0
     y_train = ref_slope * x_train + ref_offset + noise
