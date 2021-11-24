@@ -42,8 +42,10 @@ class LtngModel(pl.LightningModule):
     def step(self, batch, log_prefix=''):
         """ forward step, loss and pl logging """
         x, y = batch[0]['data'], batch[0]['label'].ravel()
+        # forward pass
         y_hat = self.net(x)
         loss = F.cross_entropy(y_hat, y)
+        # log metrics
         with torch.no_grad():
             acc = (y_hat.argmax(dim=1) == y).float().mean()
             self.log(f'{log_prefix}_loss', loss.item(), prog_bar=False)
@@ -61,6 +63,7 @@ class LtngModel(pl.LightningModule):
         return self.step(batch, 'train')
 
     def log_optimizer_params(self):
+        """ logs learning rate and optimizer's momentum (if available) """
         params = self.optimizer.param_groups[0]
         self.log('lr', params['lr'], prog_bar=True)
         if 'betas' in params:
@@ -88,20 +91,22 @@ class LtngModel(pl.LightningModule):
                                         weight_decay=self.hparams.weight_decay,
                                         betas=(self.hparams.momentum, 0.999))
 
-        self.lr_scheduler = {'scheduler': optim.lr_scheduler.OneCycleLR(
-                                        self.optimizer,
-                                        max_lr=self.hparams.learning_rate,
-                                        steps_per_epoch=len(self.train_dataloader()),
-                                        pct_start=(self.hparams.warmup_epochs / self.hparams.epochs),
-                                        epochs=self.hparams.epochs,
-                                        anneal_strategy="cos",
-                                        cycle_momentum=False,
-                                        div_factor = 100,
-                                        final_div_factor = 100,
-                                    ),
-                                'name': 'learning_rate',
-                                'interval':'step',
-                                'frequency': 1}
+        self.lr_scheduler = {
+            'scheduler': optim.lr_scheduler.OneCycleLR(
+                self.optimizer,
+                max_lr=self.hparams.learning_rate,
+                steps_per_epoch=len(self.train_dataloader()),
+                pct_start=(self.hparams.warmup_epochs / self.hparams.epochs),
+                epochs=self.hparams.epochs,
+                anneal_strategy="cos",
+                cycle_momentum=False,
+                div_factor = 100,
+                final_div_factor = 100,
+            ),
+            'name': 'learning_rate',
+            'interval':'step',
+            'frequency': 1
+        }
 
         return [self.optimizer], [self.lr_scheduler]
 
@@ -214,7 +219,7 @@ if __name__ == '__main__':
         # strategy="deepspeed_stage_2",  # Enable DeepSpeed ZeRO stage 2
         # precision=16,                 # Enable torch.cuda.amp
         # amp_backend="apex", amp_level="O2",  # Uses Nvidia APEX AMP instead
-        # strategy="fsdp",              # Enable Fully Sharded Data Parallel
+        # strategy="fsdp",              # Enable Fully Sharded Data Parallel (needs to be installed separately)
         replace_sampler_ddp=False,      # disable sampler as DALI shards the data itself
         progress_bar_refresh_rate=(args.print_freq if rank==0 else 0),
         enable_progress_bar=(rank==0),
