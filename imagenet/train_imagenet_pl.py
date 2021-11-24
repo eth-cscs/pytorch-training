@@ -1,7 +1,6 @@
 import os
 import argparse
 from glob import glob
-from simple_cnn import SimpleCNN
 
 import torch
 from torch import nn, optim
