@@ -210,11 +210,11 @@ if __name__ == '__main__':
         max_epochs=model.hparams.epochs,
         logger=wandb_logger,
         callbacks=[checkpoint_callback],
-        # strategy="ddp",
+        strategy="ddp",
         # strategy="deepspeed_stage_2",  # Enable DeepSpeed ZeRO stage 2
         # precision=16,                 # Enable torch.cuda.amp
         # amp_backend="apex", amp_level="O2",  # Uses Nvidia APEX AMP instead
-        strategy="fsdp",              # Enable Fully Sharded Data Parallel
+        # strategy="fsdp",              # Enable Fully Sharded Data Parallel
         replace_sampler_ddp=False,      # disable sampler as DALI shards the data itself
         progress_bar_refresh_rate=(args.print_freq if rank==0 else 0),
         enable_progress_bar=(rank==0),
