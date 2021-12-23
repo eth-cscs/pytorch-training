@@ -4,8 +4,38 @@ import torch
 import numpy as np
 from torch.nn import functional as F
 
+from rich import print
 from rich.console import Console
+from rich.highlighter import Highlighter
 from rich.table import Table
+from rich.text import Text
+
+
+class AmswerHighlighter(Highlighter):
+    def __init__(self):
+        self.start = 0
+        self.end = -1
+        super().__init__()
+
+    def highlight(self, text):
+        text.stylize(f"on #90EE90", self.start, self.end)
+
+
+class RefHighlighter(Highlighter):
+    def highlight(self, text):
+        text.stylize(f" ")
+
+
+class QuestionHighlighter(Highlighter):
+    def highlight(self, text):
+        text.stylize(f"bold")
+
+
+answer_hl = AmswerHighlighter()
+ref_hl = RefHighlighter()
+question_hl = QuestionHighlighter()
+console = Console()
+
 
 def normalize_text(text):
     text = text.lower()
@@ -39,8 +69,8 @@ class EvalUtility():
         self.input_ids = torch.tensor(x_eval[0])
         self.token_type_ids = torch.tensor(x_eval[1])
         self.attention_mask = torch.tensor(x_eval[2])
-        
-        self.set_rich_print()
+
+        # self.set_rich_print()
 
     def results(self, logs=None):
         outputs_eval = self.model(input_ids=self.input_ids,
@@ -66,6 +96,7 @@ class EvalUtility():
             if end < len(offsets):
                 pred_char_end = offsets[end][1]
                 pred_ans = squad_eg.context[pred_char_start:pred_char_end]
+                answer_hl.end = pred_char_end
             else:
                 pred_ans = squad_eg.context[pred_char_start:]
 
@@ -75,20 +106,25 @@ class EvalUtility():
             if normalized_pred_ans in normalized_true_ans:
                 count += 1
 
-            # print(f'  - {normalized_pred_ans:30.30s} |'
-            #       f' ref: {squad_eg.answer_text:30s} |'
-            #       f' {squad_eg.question}')
+            answer_hl.start = pred_char_start
+            console.rule(Text(f'Example {idx}'), style='magenta')
+            print(':question:', question_hl(f'{squad_eg.question}'))
+            print(':robot_face:', answer_hl(squad_eg.context))
+            print(':white_check_mark:', ref_hl(f'{squad_eg.answer_text:30s}'))
 
-            self.table.add_row(f' {squad_eg.question}',
-                               f' {normalized_pred_ans:30.30s}',
-                               f' {squad_eg.answer_text:30s}')
-        self.show_table()
+            # self.table.add_row(answer_hl(f' {squad_eg.question}'),
+            #                    # f' {normalized_pred_ans:30.30s}',
+            #                    answer_hl(f'{squad_eg.context}'),
+            #                    f' {squad_eg.answer_text:30s}')
+
+        # self.show_table()
 
     def set_rich_print(self):
 
         self.table = Table(title="Evaluation", show_lines=True)
         self.table.add_column("Question", justify="right", style="green")
-        self.table.add_column("Model's answer", justify="right", style="cyan", no_wrap=True)
+        self.table.add_column("Model's answer", justify="right", style="cyan",
+                              no_wrap=True)
         self.table.add_column("Reference", style="magenta")
 
     def show_table(self):
