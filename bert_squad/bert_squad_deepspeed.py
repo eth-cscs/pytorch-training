@@ -46,7 +46,7 @@ tokenizer = BertWordPieceTokenizer(os.path.join(save_path, 'vocab.txt'),
 
 model = BertForQuestionAnswering.from_pretrained(
     hf_model,
-    cache_dir=os.path.join(bert_cache, f'{hf_model}-uncased_qa')
+    cache_dir=os.path.join(bert_cache, f'{hf_model}_qa')
 )
 model.train()
 
@@ -136,7 +136,7 @@ if rank == 0:
 
     if os.environ['SLURM_NODEID'] == '0':
         model_hash = datetime.now().strftime("%Y-%m-%d-%H%M%S")
-        model_path_name = './cache/model_trained_deepspeed_{model_hash}'
+        model_path_name = f'./cache/model_trained_deepspeed_{model_hash}'
     
         # save model's state_dict
         torch.save(model.state_dict(), model_path_name)
@@ -155,8 +155,7 @@ if rank == 0:
     
         # load the model on gpu
         # model.load_state_dict(torch.load(model_path_name))
-    
-        model.eval()
+        # model.eval()
     
         samples = np.random.choice(len(x_eval[0]), 50, replace=False)
     
