@@ -5,13 +5,14 @@ import torch
 from datasets import load_dataset  # , load_metric
 from transformers import (AdamW, AutoModelForSeq2SeqLM,
                           AutoTokenizer, DataCollatorForSeq2Seq)
-from torch.utils.data import DataLoader
 
 
 # Benchmark settings
 parser = argparse.ArgumentParser(description='PyTorch Synthetic Benchmark')
 parser.add_argument('--model', type=str, default='t5-3b',
                     help='Name of the model from HuggingFace')
+parser.add_argument('--download-only', action='store_true',
+                    help='Download model, tokenizer, etc and exit')
 parser = deepspeed.add_config_arguments(parser)
 args = parser.parse_args()
 
@@ -26,6 +27,9 @@ model = AutoModelForSeq2SeqLM.from_pretrained(
     # config=config,
     cache_dir=f'./cache/{model_name}_model'
 )
+
+if args.download_only:
+    exit()
 
 raw_datasets = load_dataset('xsum')
 
@@ -77,16 +81,6 @@ processed_datasets = raw_datasets.map(
 train_dataset = processed_datasets["train"]
 eval_dataset = processed_datasets["validation"]
 
-train_dataloader = DataLoader(
-    train_dataset, shuffle=True, collate_fn=data_collator,
-    batch_size=per_device_train_batch_size
-)
-
-eval_dataloader = DataLoader(
-    eval_dataset, collate_fn=data_collator,
-    batch_size=per_device_eval_batch_size
-)
-
 weight_decay = 0.0
 no_decay = ["bias", "LayerNorm.weight"]
 optimizer_grouped_parameters = [
@@ -107,25 +101,24 @@ model_engine, optimizer, trainloader, __ = deepspeed.initialize(
     training_data=train_dataset, collate_fn=data_collator
 )
 
-
 def print_peak_memory(prefix, device):
     if device == 0:
         print(f"{prefix}: {torch.cuda.max_memory_allocated(device) // 1e6}MB ")
 
-
 print_peak_memory("Max memory allocated after creating DDP", 0)
 
-# model.train();
+# model.train()
 for epoch in range(1):
-    for step, batch in enumerate(train_dataloader):
-        optimizer.zero_grad()
-        outputs = model(**batch.to(model_engine.device))
-        loss = outputs.loss
-        model_engine.backward(loss)
+    for step, batch in enumerate(trainloader):
+        outputs = model(input_ids=batch['input_ids'].to(model_engine.device),
+                        attention_mask=batch['attention_mask'].to(model_engine.device),
+                        labels=batch['labels'].to(model_engine.device),
+                        decoder_input_ids=batch['decoder_input_ids'].to(model_engine.device))
+        model_engine.backward(outputs.loss)
         model_engine.step()
 
-        # stop after 100 steps for demo: 
-        if step > 100:
-            break
+        # # stop after 100 steps for demo:
+        # if step > 100:
+        #     break
 
-        print_peak_memory("Max memory allocated during training", 0)
+        # print_peak_memory("Max memory allocated during training", 0)
