@@ -25,6 +25,8 @@ def print_peak_memory(prefix, device):
 parser = argparse.ArgumentParser(description='BERT finetuning on SQuAD')
 parser.add_argument('--model', type=str, default='resnet50',
                     help='model to benchmark')
+parser.add_argument('--download-only', action='store_true',
+                    help='Download model, tokenizer, etc and exit')
 parser = deepspeed.add_config_arguments(parser)
 args = parser.parse_args()
 
@@ -48,6 +50,10 @@ model = BertForQuestionAnswering.from_pretrained(
     hf_model,
     cache_dir=os.path.join(bert_cache, f'{hf_model}_qa')
 )
+
+if args.download_only:
+    exit()
+
 model.train()
 
 train_path = os.path.join(bert_cache, 'data', 'train-v1.1.json')
