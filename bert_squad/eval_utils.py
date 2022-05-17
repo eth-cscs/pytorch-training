@@ -18,7 +18,7 @@ class AmswerHighlighter(Highlighter):
         super().__init__()
 
     def highlight(self, text):
-        text.stylize(f"on #90EE90", self.start, self.end)
+        text.stylize(f"black on #90EE90", self.start, self.end)
 
 
 class RefHighlighter(Highlighter):
@@ -73,10 +73,12 @@ class EvalUtility():
         # self.set_rich_print()
 
     def results(self, logs=None):
-        outputs_eval = self.model(input_ids=self.input_ids,
-                                  token_type_ids=self.token_type_ids,
-                                  attention_mask=self.attention_mask
-                                  )
+        with torch.no_grad():
+            outputs_eval = self.model(input_ids=self.input_ids,
+                                      token_type_ids=self.token_type_ids,
+                                      attention_mask=self.attention_mask
+                                      )
+
         pred_start = F.softmax(outputs_eval.start_logits,
                                dim=-1).cpu().detach().numpy()
         pred_end = F.softmax(outputs_eval.end_logits,
