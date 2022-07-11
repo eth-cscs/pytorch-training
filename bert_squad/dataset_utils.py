@@ -4,12 +4,13 @@ import numpy as np
 
 class SquadExample:
     def __init__(self, question, context, start_char_idx, answer_text,
-                 all_answers, max_len, tokenizer):
+                 #all_answers,
+                 max_len, tokenizer):
         self.question = question
         self.context = context
         self.start_char_idx = start_char_idx
         self.answer_text = answer_text
-        self.all_answers = all_answers
+        # self.all_answers = all_answers
         self.max_len = max_len
         self.skip = False
         self.tokenizer = tokenizer
@@ -82,56 +83,34 @@ class SquadExample:
         self.context_token_to_char = tokenized_context.offsets
 
 
+def create_squad_example(item, max_len, tokenizer):
+    # question = item['question']
+    # context = item['context']
+    # start_char_idx = item['answers']['answer_start'][0]
+    # answer_text = item['answers']['text']
+    
+    squad_ex = SquadExample(question=item['question'],
+                            context=item['context'],
+                            start_char_idx=item['answers']['answer_start'][0],
+                            answer_text=item['answers']['text'],
+                            max_len=max_len,
+                            tokenizer=tokenizer)
+    squad_ex.preprocess()
+    return squad_ex
+
+
 def process_squad_item(item, max_len, tokenizer):
-    squad_examples = []
-    for para in item["paragraphs"]:
-        context = para["context"]
-        for qa in para["qas"]:
-            question = qa["question"]
-            answer_text = qa["answers"][0]["text"]
-            all_answers = [_["text"] for _ in qa["answers"]]
-            start_char_idx = qa["answers"][0]["answer_start"]
-            squad_eg = SquadExample(
-                question, context, start_char_idx, answer_text,
-                all_answers, max_len, tokenizer)
-            squad_eg.preprocess()
-            if not squad_eg.skip:
-                squad_examples.append(squad_eg)
-    return np.array(squad_examples)
-
-
-def create_squad_examples(raw_data, max_len, tokenizer):
-    squad_examples = []
-    for item in raw_data["data"]:
-        squad_examples.extend(process_squad_item(item, max_len, tokenizer))
-    return np.array(squad_examples)
-
-
-def create_inputs_targets(squad_examples, shuffle=False, seed=0):
-    dataset_dict = {
-        "input_ids": [],
-        "token_type_ids": [],
-        "attention_mask": [],
-        "start_token_idx": [],
-        "end_token_idx": [],
+    squad_ex = create_squad_example(item, max_len, tokenizer)
+    return {
+        'input_ids': squad_ex.input_ids,
+        'token_type_ids': squad_ex.token_type_ids,
+        'attention_mask': squad_ex.attention_mask,
+        'start_token_idx': squad_ex.start_token_idx,
+        'end_token_idx': squad_ex.end_token_idx,
+        # 'context_token_to_char': squad_ex.context_token_to_char
     }
 
-    if shuffle:
-        np.random.seed(seed)
-        np.random.shuffle(squad_examples)
 
-    for item in squad_examples:
-        if not item.skip:
-            for key in dataset_dict:
-                dataset_dict[key].append(getattr(item, key))
-
-    for key in dataset_dict:
-        dataset_dict[key] = np.array(dataset_dict[key])
-
-    x = (
-        dataset_dict["input_ids"],
-        dataset_dict["token_type_ids"],
-        dataset_dict["attention_mask"],
-    )
-    y = (dataset_dict["start_token_idx"], dataset_dict["end_token_idx"])
-    return x, y
+def filter_squad_bad(item, max_len, tokenizer):
+    squad_ex = create_squad_example(item, max_len, tokenizer)
+    return not squad_ex.skip
