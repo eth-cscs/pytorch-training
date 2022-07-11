@@ -15,11 +15,6 @@ from torch.nn import functional as F
 from datetime import datetime
 
 
-def print_peak_memory(prefix, device):
-    if device == 0:
-        print(f"{prefix}: {torch.cuda.max_memory_allocated(device) // 1e6}MB ")
-
-
 # Benchmark settings
 parser = argparse.ArgumentParser(description='BERT finetuning on SQuAD')
 parser.add_argument('--model', type=str, default='resnet50',
@@ -82,8 +77,6 @@ model_engine, optimizer, trainloader, __ = deepspeed.initialize(
 )
 
 rank = torch.distributed.get_rank()
-print_peak_memory(f"Rank -{rank}: Max memory allocated after creating DDP", 0)
-
 
 # training
 num_epochs = 1
@@ -98,10 +91,6 @@ for epoch in range(num_epochs):  # loop over the dataset multiple times
         loss = outputs[0]
         model_engine.backward(loss)
         model_engine.step()
-        # print_peak_memory("Max memory allocated after optimizer step", 0)
-
-        # if i > 10:
-        #     break
 
 if rank == 0:
     print('Finished Training')

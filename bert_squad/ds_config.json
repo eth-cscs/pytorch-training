@@ -1,5 +1,5 @@
 {
-    "train_batch_size": 256,
+    "train_batch_size": 512,
     "gradient_accumulation_steps": 1,
     "steps_per_print": 10,
     "optimizer": {
@@ -12,6 +12,6 @@
         "enabled": true
     },
     "zero_optimization": {
-        "stage": 2
+        "stage": 1
     }
 }
