@@ -109,7 +109,7 @@ class EvalUtility():
                 count += 1
 
             answer_hl.start = pred_char_start
-            console.rule(Text(f'Example {idx}'), style='magenta')
+            console.rule(Text(f'Example'), style='magenta')
             print(':question:', question_hl(f'{squad_eg.question}'))
             print(':robot_face:', answer_hl(squad_eg.context))
             print(':white_check_mark:', ref_hl(f'{squad_eg.answer_text[0]:30s}'))

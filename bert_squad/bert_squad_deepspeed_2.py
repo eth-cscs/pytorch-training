@@ -86,7 +86,8 @@ print_peak_memory(f"Rank -{rank}: Max memory allocated after creating DDP", 0)
 
 
 # training
-for epoch in range(2):  # loop over the dataset multiple times
+num_epochs = 1
+for epoch in range(num_epochs):  # loop over the dataset multiple times
     for i, batch in enumerate(trainloader, 0):
         outputs = model(input_ids=batch['input_ids'].to(model_engine.device),
                         token_type_ids=batch['token_type_ids'].to(model_engine.device),
@@ -142,7 +143,7 @@ if rank == 0:
         )
 
         for i, eval_batch in enumerate(eval_dataloader):
-            if not i%1000:
+            if not i % 1000:
                 eu.EvalUtility(eval_batch, squad_example_objects[i:i + batch_size], model_cpu).results()
 
             if i > 10000:
