@@ -4,7 +4,6 @@ import numpy as np
 
 class SquadExample:
     def __init__(self, question, context, start_char_idx, answer_text,
-                 #all_answers,
                  max_len, tokenizer):
         self.question = question
         self.context = context
@@ -84,11 +83,6 @@ class SquadExample:
 
 
 def create_squad_example(item, max_len, tokenizer):
-    # question = item['question']
-    # context = item['context']
-    # start_char_idx = item['answers']['answer_start'][0]
-    # answer_text = item['answers']['text']
-    
     squad_ex = SquadExample(question=item['question'],
                             context=item['context'],
                             start_char_idx=item['answers']['answer_start'][0],
@@ -107,7 +101,6 @@ def process_squad_item(item, max_len, tokenizer):
         'attention_mask': squad_ex.attention_mask,
         'start_token_idx': squad_ex.start_token_idx,
         'end_token_idx': squad_ex.end_token_idx,
-        # 'context_token_to_char': squad_ex.context_token_to_char
     }
 
 
