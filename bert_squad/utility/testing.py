@@ -104,22 +104,20 @@ class EvalUtility():
 
             normalized_pred_ans = normalize_text(pred_ans)
             normalized_true_ans = [normalize_text(squad_eg.answer_text[0])]
-                                   # for _ in squad_eg.all_answers]
+            #                      for _ in squad_eg.all_answers]
             if normalized_pred_ans in normalized_true_ans:
                 count += 1
 
             answer_hl.start = pred_char_start
+            # metric.compute(
+            #     predictions=[{'prediction_text': '1976', 'id': '56e10a3be3433e1400422b22'}],
+            #     references = [{'answers': {'answer_start': [97], 'text': ['in 1976']}, 'id': '56e10a3be3433e1400422b22'}]
+            # )
+            print(self.squad_examples)
             console.rule(Text(f'Example'), style='magenta')
             print(':question:', question_hl(f'{squad_eg.question}'))
             print(':robot_face:', answer_hl(squad_eg.context))
-            print(':white_check_mark:', ref_hl(f'{squad_eg.answer_text[0]:30s}'))
-
-            # self.table.add_row(answer_hl(f' {squad_eg.question}'),
-            #                    # f' {normalized_pred_ans:30.30s}',
-            #                    answer_hl(f'{squad_eg.context}'),
-            #                    f' {squad_eg.answer_text:30s}')
-
-        # self.show_table()
+            print(':white_check_mark:', ref_hl(f'{squad_eg.answer_text:30s}'))
 
     def set_rich_print(self):
 

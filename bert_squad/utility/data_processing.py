@@ -82,6 +82,52 @@ class SquadExample:
         self.context_token_to_char = tokenized_context.offsets
 
 
+def process_squad_item_batched(ds_slice, max_len, tokenizer):
+    squad_dict = {
+        'input_ids': [],
+        'token_type_ids': [],
+        'attention_mask': [],
+        'start_token_idx': [],
+        'end_token_idx': [],
+    }
+    for question, context, answers_text, answer_start in \
+        zip(ds_slice['question'], ds_slice['context'],
+            ds_slice['answers.text'], ds_slice['answers.answer_start']):
+        for answers_text_i, answer_start_i in zip(answers_text, answer_start):
+            squad_ex = SquadExample(question=question,
+                                    context=context,
+                                    start_char_idx=answer_start_i,
+                                    answer_text=answers_text_i,
+                                    max_len=max_len,
+                                    tokenizer=tokenizer)
+            squad_ex.preprocess()
+            if not squad_ex.skip:
+                squad_dict['input_ids'].append(squad_ex.input_ids)
+                squad_dict['token_type_ids'].append(squad_ex.token_type_ids)
+                squad_dict['attention_mask'].append(squad_ex.attention_mask)
+                squad_dict['start_token_idx'].append(squad_ex.start_token_idx)
+                squad_dict['end_token_idx'].append(squad_ex.end_token_idx)
+
+    return squad_dict
+
+
+def squad_examples_from_dataset(ds_item, max_len, tokenizer):
+    squad_examples = []
+    for answers_text, answer_start in zip(ds_item['answers.text'],
+                                          ds_item['answers.answer_start']):
+        squad_ex = SquadExample(question=ds_item['question'],
+                                context=ds_item['context'],
+                                start_char_idx=answer_start,
+                                answer_text=answers_text,
+                                max_len=max_len,
+                                tokenizer=tokenizer)
+        squad_ex.preprocess()
+        if not squad_ex.skip:
+            squad_examples.append(squad_ex)
+
+    return squad_examples
+
+
 def create_squad_example(item, max_len, tokenizer):
     squad_ex = SquadExample(question=item['question'],
                             context=item['context'],
@@ -93,7 +139,7 @@ def create_squad_example(item, max_len, tokenizer):
     return squad_ex
 
 
-def process_squad_item(item, max_len, tokenizer):
+def _process_squad_item(item, max_len, tokenizer):
     squad_ex = create_squad_example(item, max_len, tokenizer)
     return {
         'input_ids': squad_ex.input_ids,
@@ -104,6 +150,12 @@ def process_squad_item(item, max_len, tokenizer):
     }
 
 
-def filter_squad_bad(item, max_len, tokenizer):
+# def process_squad_item_batched(ds_slice, max_len, tokenizer):
+#     try:
+#         _process_squad_item_batched(ds_slice, max_len, tokenizer)
+#     except TypeError:
+
+
+def skip_squad_example(item, max_len, tokenizer):
     squad_ex = create_squad_example(item, max_len, tokenizer)
-    return not squad_ex.skip
+    return squad_ex.skip
