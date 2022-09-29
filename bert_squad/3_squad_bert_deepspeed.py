@@ -3,23 +3,22 @@
 
 import argparse
 import deepspeed
-import numpy as np
 import os
-import json
-import dataset_utils as du
-import eval_utils as eu
+import utility.data_processing as dpp
+import utility.testing as testing
 import torch
+from datasets import load_dataset, load_metric
 from transformers import BertTokenizer, BertForQuestionAnswering, AdamW
 from tokenizers import BertWordPieceTokenizer
 from torch.utils.data import DataLoader
 from torch.nn import functional as F
 from datetime import datetime
+from datasets.utils import disable_progress_bar
+from datasets import disable_caching
 
 
-def print_peak_memory(prefix, device):
-    if device == 0:
-        print(f"{prefix}: {torch.cuda.max_memory_allocated(device) // 1e6}MB ")
-
+disable_progress_bar()
+disable_caching()
 
 # Benchmark settings
 parser = argparse.ArgumentParser(description='BERT finetuning on SQuAD')
@@ -56,55 +55,21 @@ if args.download_only:
 
 model.train()
 
-train_path = os.path.join(bert_cache, 'data', 'train-v1.1.json')
-eval_path = os.path.join(bert_cache, 'data', 'dev-v1.1.json')
-with open(train_path) as f:
-    raw_train_data = json.load(f)
+hf_dataset = load_dataset('squad')
 
-with open(eval_path) as f:
-    raw_eval_data = json.load(f)
-
-batch_size = 8
 max_len = 384
 
-train_squad_examples = du.create_squad_examples(
-    raw_train_data,
-    max_len,
-    tokenizer
+hf_dataset.flatten()
+processed_dataset = hf_dataset.flatten().map(
+    lambda example: dpp.process_squad_item_batched(example, max_len,
+                                                   tokenizer),
+    remove_columns=hf_dataset.flatten()['train'].column_names,
+    batched=True,
+    num_proc=12
 )
-x_train, y_train = du.create_inputs_targets(
-    train_squad_examples,
-    shuffle=True,
-    seed=42
-)
-print(f"{len(train_squad_examples)} training points created.")
 
-eval_squad_examples = du.create_squad_examples(
-    raw_eval_data,
-    max_len,
-    tokenizer
-)
-x_eval, y_eval = du.create_inputs_targets(eval_squad_examples)
-print(f"{len(eval_squad_examples)} evaluation points created.")
-
-
-class SquadDataset(torch.utils.data.Dataset):
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-
-    def __getitem__(self, idx):
-        return (torch.tensor(self.x[0][idx]),
-                torch.tensor(self.x[1][idx]),
-                torch.tensor(self.x[2][idx]),
-                torch.tensor(self.y[0][idx]),
-                torch.tensor(self.y[1][idx]))
-
-    def __len__(self):
-        return len(self.x[0])
-
-
-train_set = SquadDataset(x_train, y_train)
+train_set = processed_dataset["train"]
+train_set.set_format(type='torch')
 
 parameters = filter(lambda p: p.requires_grad, model.parameters())
 
@@ -116,57 +81,73 @@ model_engine, optimizer, trainloader, __ = deepspeed.initialize(
 )
 
 rank = torch.distributed.get_rank()
-print_peak_memory(f"Rank -{rank}: Max memory allocated after creating DDP", 0)
-
 
 # training
-for epoch in range(2):  # loop over the dataset multiple times
+num_epochs = 1
+for epoch in range(num_epochs):  # loop over the dataset multiple times
     for i, batch in enumerate(trainloader, 0):
-        outputs = model(input_ids=batch[0].to(model_engine.device),
-                        token_type_ids=batch[1].to(model_engine.device),
-                        attention_mask=batch[2].to(model_engine.device),
-                        start_positions=batch[3].to(model_engine.device),
-                        end_positions=batch[4].to(model_engine.device))
+        outputs = model(input_ids=batch['input_ids'].to(model_engine.device),
+                        token_type_ids=batch['token_type_ids'].to(model_engine.device),
+                        attention_mask=batch['attention_mask'].to(model_engine.device),
+                        start_positions=batch['start_token_idx'].to(model_engine.device),
+                        end_positions=batch['end_token_idx'].to(model_engine.device))
         # forward + backward + optimize
         loss = outputs[0]
         model_engine.backward(loss)
         model_engine.step()
-        # print_peak_memory("Max memory allocated after optimizer step", 0)
-
-        # if i > 10:
-        #     break
 
 if rank == 0:
     print('Finished Training')
-
-
     if os.environ['SLURM_NODEID'] == '0':
         model_hash = datetime.now().strftime("%Y-%m-%d-%H%M%S")
         model_path_name = f'./cache/model_trained_deepspeed_{model_hash}'
-    
+
         # save model's state_dict
         torch.save(model.state_dict(), model_path_name)
-    
+
         # create the model again since the previous one is on the gpu
         model_cpu = BertForQuestionAnswering.from_pretrained(
             "bert-base-uncased",
             cache_dir=os.path.join(bert_cache, 'bert-base-uncased_qa')
         )
-    
+
         # load the model on cpu
         model_cpu.load_state_dict(
             torch.load(model_path_name,
                        map_location=torch.device('cpu'))
         )
-    
+
         # load the model on gpu
         # model.load_state_dict(torch.load(model_path_name))
         # model.eval()
-    
-        samples = np.random.choice(len(x_eval[0]), 50, replace=False)
-    
-        eu.EvalUtility(
-            (x_eval[0][samples], x_eval[1][samples], x_eval[2][samples]),
-            model_cpu,
-            eval_squad_examples[samples]
-        ).results()
+
+        eval_set = processed_dataset["validation"]
+        eval_set.set_format(type='torch')
+        batch_size = 1
+
+        eval_dataloader = DataLoader(
+            eval_set,
+            shuffle=False,
+            batch_size=batch_size
+        )
+
+        squad_example_objects = []
+        for item in hf_dataset['validation'].flatten():
+            squad_examples = dpp.squad_examples_from_dataset(item, max_len,
+                                                             tokenizer)
+            try:
+                squad_example_objects.extend(squad_examples)
+            except TypeError:
+                squad_example_objects.append(squad_examples)
+
+        assert len(eval_set) == len(squad_example_objects)
+
+        start_sample = 0
+        num_test_samples = 10
+        for i, eval_batch in enumerate(eval_dataloader):
+            if i > start_sample:
+                testing.EvalUtility(eval_batch, [squad_example_objects[i]],
+                                    model_cpu).results()
+
+            if i > start_sample + num_test_samples:
+                break
