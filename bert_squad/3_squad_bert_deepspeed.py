@@ -86,11 +86,13 @@ rank = torch.distributed.get_rank()
 num_epochs = 1
 for epoch in range(num_epochs):  # loop over the dataset multiple times
     for i, batch in enumerate(trainloader, 0):
-        outputs = model(input_ids=batch['input_ids'].to(model_engine.device),
-                        token_type_ids=batch['token_type_ids'].to(model_engine.device),
-                        attention_mask=batch['attention_mask'].to(model_engine.device),
-                        start_positions=batch['start_token_idx'].to(model_engine.device),
-                        end_positions=batch['end_token_idx'].to(model_engine.device))
+        outputs = model_engine(
+            input_ids=batch['input_ids'].to(model_engine.device),
+            token_type_ids=batch['token_type_ids'].to(model_engine.device),
+            attention_mask=batch['attention_mask'].to(model_engine.device),
+            start_positions=batch['start_token_idx'].to(model_engine.device),
+            end_positions=batch['end_token_idx'].to(model_engine.device)
+        )
         # forward + backward + optimize
         loss = outputs[0]
         model_engine.backward(loss)
