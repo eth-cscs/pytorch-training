@@ -1,4 +1,5 @@
 .ipynb_checkpoints
 __pycache__
-lightning_logs
 *.out
+*.pdf
+data/
