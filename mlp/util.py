@@ -43,43 +43,48 @@ visualize_transform = transforms.Compose([
 ])
 
 
-def show_predictions(images, predicted_labels, num_col=8):
+def show_predictions(images, predicted_labels, num_cols=8):
     num_samples = predicted_labels.shape[0]
-    num_rows = num_samples // num_col
-    fig, axs = plt.subplots(num_rows, num_col,
-                            figsize=(num_col * 1.3, num_rows * 1.3))
+    num_rows = (num_samples + num_cols - 1) // num_cols
+    fig, axs = plt.subplots(num_rows, num_cols,
+                            figsize=(num_cols * 1.3, num_rows * 1.3))
 
-    for col in range(num_rows):
-        for row in range(num_col):
-            image = visualize_transform(images[num_col * col + row].cpu())
-            axs[col, row].imshow(image, cmap='Blues')
-            axs[col, row].axis('off')
-            axs[col, row].text(24, 3,
-                               f'{predicted_labels[num_col * col + row]}')
+    axs = axs.reshape([num_rows, num_cols])
+    
+    for row in range(num_rows):
+        for col in range(num_cols):
+            index = num_cols * row + col
+            
+            axs[row, col].axis('off')
+            if index >= num_samples:
+                continue
+            image = visualize_transform(images[index].cpu())
+            axs[row, col].imshow(image, cmap='Blues')
+            axs[row, col].text(24, 3, f'{predicted_labels[index]}')
 
     plt.show()
 
 
-def show_act_functions(x, functions, num_col=8):
+def show_act_functions(x, functions, num_cols=8):
 
     num_samples = len(functions)
-    num_rows = math.ceil(num_samples / num_col)
-    fig, axs = plt.subplots(num_rows, num_col,
-                            figsize=(num_col * 4, num_rows * 3))
+    num_rows = (num_samples + num_cols - 1) // num_cols
+    fig, axs = plt.subplots(num_rows, num_cols,
+                            figsize=(num_cols * 4, num_rows * 3))
 
-    for col in range(num_rows):
-        for row in range(num_col):
-            if num_col * col + row > num_samples - 1:
+    axs = axs.reshape([num_rows, num_cols])
+
+    
+    for row in range(num_rows):
+        for col in range(num_cols):            
+            index = num_cols * row + col
+            if index >= num_samples:
                 break
 
-            if len(axs.shape) > 1:
-                p = axs[col, row]
-            else:
-                p = axs[col + row]
-
-            fun = functions[num_col * col + row]
+            p = axs[row, col]
+                
+            fun = functions[index]
             p.plot(x, fun()(x), label=fun.__name__, c='k')
-            # axs[col, row].axis('off')
             p.legend()
             p.grid(ls=':', alpha=0.5)
 
