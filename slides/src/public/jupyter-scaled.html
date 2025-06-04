@@ -51,6 +51,7 @@
         iframe.src = `http://localhost:8888/${useLab ? "lab/tree/" : "notebooks/"}${notebook}`
         document.body.appendChild(iframe)
       } else {
+        console.log('We think we are NOT running on localhost')
         const msg = document.createElement("div")
         msg.className = "fallback-message"
         msg.textContent = `⚠️ The notebook "${notebook}" can only be viewed when running locally with JupyterLab.`
