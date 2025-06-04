@@ -85,7 +85,7 @@ transition: fade-out
 # Live Jupyter
 
 <iframe
-  src="/jupyter-scaled.html?zoom=0.5&notebook=cnn/solutions/CNN_Image_Classification_CIFAR-10.ipynb"
+  src="jupyter-scaled.html?zoom=0.5&notebook=cnn/solutions/CNN_Image_Classification_CIFAR-10.ipynb"
   width="100%"
   height="600px"
   frameborder="0">
@@ -99,7 +99,7 @@ transition: fade-out
 # Live Jupyter Lab
 
 <iframe
-  src="/jupyter-scaled.html?zoom=0.5&notebook=cnn/solutions/CNN_Image_Classification_CIFAR-10.ipynb&lab=true"
+  src="jupyter-scaled.html?zoom=0.5&notebook=cnn/solutions/CNN_Image_Classification_CIFAR-10.ipynb&lab=true"
   width="100%"
   height="600px"
   frameborder="0">
