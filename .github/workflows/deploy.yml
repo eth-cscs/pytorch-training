@@ -2,36 +2,56 @@ name: Deploy Slidev to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches: [main, slidev]
+  workflow_dispatch:
 
-env:
-  DIST_DIR: prod-dist
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 concurrency:
-  group: deploy
-  cancel-in-progress: true
+  group: pages
+  cancel-in-progress: false
+
+defaults:
+  run:
+    working-directory: ./slides/src
 
 jobs:
   build:
-    uses: ./.github/workflows/build-steps.yml
-    with:
-      output-dir: prod-dist
-
-  deploy:
     runs-on: ubuntu-latest
-    needs: build
+
     steps:
       - uses: actions/checkout@v4
 
-      - name: Download build artifact
-        uses: actions/download-artifact@v4
+      - uses: actions/setup-node@v4
         with:
-          path: prod-dist
+          node-version: 'lts/*'
 
-      - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
+      - name: Install pnpm & deps
+        run: |
+          npm i -g pnpm
+          pnpm install
+
+      - name: Build Slidev
+        run: pnpm build --base / --out ../../dist
+
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          branch: gh-pages
-          folder: prod-dist
-          clean-exclude: pr-preview
-          force: false
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
