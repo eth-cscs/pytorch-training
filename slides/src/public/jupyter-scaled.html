@@ -45,13 +45,12 @@
 
     window.addEventListener("DOMContentLoaded", () => {
       if (isLocalhost()) {
-        console.log('We think we are running on localhost')
         const iframe = document.createElement("iframe")
         iframe.className = "scaled-frame"
-        iframe.src = `http://localhost:8888/${useLab ? "lab/tree/" : "notebooks/"}${notebook}`
+        const nonce = Math.random().toString(36).slice(2)
+        iframe.src = `http://localhost:8888/${useLab ? "lab/tree/" : "notebooks/"}${notebook}?v=${nonce}`
         document.body.appendChild(iframe)
       } else {
-        console.log('We think we are NOT running on localhost')
         const msg = document.createElement("div")
         msg.className = "fallback-message"
         msg.textContent = `⚠️ The notebook "${notebook}" can only be viewed when running locally with JupyterLab.`

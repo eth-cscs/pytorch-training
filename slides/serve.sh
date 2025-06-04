@@ -47,13 +47,16 @@ COMMON_OPTS=(
 
 # Command to run inside the container
 CMD='
-find /exercises -name "*.ipynb" -exec jupyter trust {} \; && \
+find /exercises -name "*.ipynb" -exec jupyter trust {} \; >/dev/null 2>&1 && \
 cd /exercises && jupyter lab --ip=0.0.0.0 --no-browser \
-    --NotebookApp.token="" \
-    --NotebookApp.disable_check_xsrf=True \
-    --NotebookApp.tornado_settings="{\"headers\": {\"Content-Security-Policy\": \"frame-ancestors *\", \"X-Frame-Options\": \"ALLOWALL\"}}" \
-    --NotebookApp.terminals_enabled=False \
-    --NotebookApp.allow_origin='*' & \
+    --IdentityProvider.token="" \
+    --ServerApp.disable_check_xsrf=True \
+    --ServerApp.tornado_settings="{\"headers\": {\"Content-Security-Policy\": \"frame-ancestors *\", \"X-Frame-Options\": \"ALLOWALL\"}}" \
+    --ServerApp.terminals_enabled=False \
+    --ServerApp.log_level=WARN \
+    --ServerApp.websocket_ping_interval=40000 \
+    --ServerApp.websocket_ping_timeout=30000 \
+    --ServerApp.allow_origin='*' & \
 python3 -m http.server 9000 --directory /slides & \
 cd /slides && pnpm install && pnpm dev --remote -o false
 '
