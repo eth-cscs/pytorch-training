@@ -35,7 +35,7 @@ jobs:
           pnpm install
 
       - name: Build Slidev
-        run: pnpm build --base / --out ../../dist
+        run: pnpm build --base /${{github.event.repository.name}}/slides/ --out ../../dist/slides
 
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v4
@@ -50,7 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url }}slides/
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
