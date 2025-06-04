@@ -14,6 +14,10 @@
     }
 
     const { zoom, notebook, useLab } = getParams()
+    const isLocal = location.hostname === "localhost" || location.hostname === "127.0.0.1"
+    const iframeSrc = isLocal
+      ? `http://localhost:8888/${useLab ? "lab/tree/" : "notebooks/"}${notebook}`
+      : null
 
     const styleTag = document.createElement('style')
     styleTag.textContent = `
@@ -31,22 +35,27 @@
         border: none;
         display: block;
       }
+      .fallback-message {
+        color: #444;
+        font-size: 1.2rem;
+        padding: 2rem;
+        text-align: center;
+      }
     `
     document.head.appendChild(styleTag)
 
     window.addEventListener("DOMContentLoaded", () => {
-      const iframe = document.createElement("iframe")
-
-      let iframeSrc = "http://localhost:8888"
-      if (notebook) {
-        iframeSrc += useLab
-          ? `/lab/tree/${notebook}`       // full JupyterLab UI
-          : `/notebooks/${notebook}`      // minimal notebook view
+      if (iframeSrc) {
+        const iframe = document.createElement("iframe")
+        iframe.className = "scaled-frame"
+        iframe.src = iframeSrc
+        document.body.appendChild(iframe)
+      } else {
+        const msg = document.createElement("div")
+        msg.className = "fallback-message"
+        msg.textContent = `⚠️ The notebook "${notebook}" can only be viewed when running locally with JupyterLab.`
+        document.body.appendChild(msg)
       }
-
-      iframe.className = "scaled-frame"
-      iframe.src = iframeSrc
-      document.body.appendChild(iframe)
     })
   </script>
 </head>
