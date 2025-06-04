@@ -9,7 +9,7 @@ on:
 
 defaults:
   run:
-    working-directory: ./slides/src
+    working-directory: .
 
 jobs:
   build:
@@ -27,12 +27,15 @@ jobs:
       - name: Install pnpm & dependencies
         run: |
           npm install -g pnpm
+          cd slides/src
           pnpm install
 
       - name: Build Slidev
-        run: pnpm build --base / --out ../../${{ inputs.output-dir }}
+        run: |
+          cd slides/src
+          pnpm build --base / --out ../../${{ inputs.output-dir }}
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          path: ../../${{ inputs.output-dir }}
+          path: ${{ inputs.output-dir }}
