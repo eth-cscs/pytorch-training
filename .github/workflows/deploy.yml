@@ -21,6 +21,7 @@ defaults:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: github.repository == 'eth-cscs/pytorch-training'
 
     steps:
       - uses: actions/checkout@v4

@@ -12,12 +12,11 @@
         useLab: urlParams.get("lab") === "true",   // force lab view if desired
       }
     }
+    function isLocalhost() {
+      return location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+    }
 
     const { zoom, notebook, useLab } = getParams()
-    const isLocal = location.hostname === "localhost" || location.hostname === "127.0.0.1"
-    const iframeSrc = isLocal
-      ? `http://localhost:8888/${useLab ? "lab/tree/" : "notebooks/"}${notebook}`
-      : null
 
     const styleTag = document.createElement('style')
     styleTag.textContent = `
@@ -45,10 +44,10 @@
     document.head.appendChild(styleTag)
 
     window.addEventListener("DOMContentLoaded", () => {
-      if (iframeSrc) {
+      if (isLocalhost()) {
         const iframe = document.createElement("iframe")
         iframe.className = "scaled-frame"
-        iframe.src = iframeSrc
+        iframe.src = `http://localhost:8888/${useLab ? "lab/tree/" : "notebooks/"}${notebook}`
         document.body.appendChild(iframe)
       } else {
         const msg = document.createElement("div")

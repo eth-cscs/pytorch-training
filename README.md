@@ -15,7 +15,9 @@ More specifically, the following topics will be covered:
 
 The lessons will blend theory with hands-on practice, using [PyTorch] for practical exercises. We will run these sessions on the [Alps] supercomputer at [CSCS].
 
+
 [View slides](https://eth-cscs.github.io/pytorch-training/slides/)
+
 [Hands-on Introduction to Deep Learning with PyTorch]: https://www.cscs.ch/publications/news/course-hands-on-introduction-to-deep-learning-with-pytorch
 [PyTorch]: https://pytorch.org/
 [CSCS]: https://www.cscs.ch/
