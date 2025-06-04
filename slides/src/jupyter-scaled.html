@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script>
+    function getZoom() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const zoom = parseFloat(urlParams.get("zoom"));
+      return isNaN(zoom) ? 0.75 : zoom;
+    }
+
+    const zoom = getZoom();
+    const scaleStyle = `
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+      }
+      .scaled-frame {
+        transform: scale(${zoom});
+        transform-origin: top left;
+        width: calc(100% / ${zoom});
+        height: calc(100% / ${zoom});
+        border: none;
+        display: block;
+      }
+    `;
+    const styleTag = document.createElement('style');
+    styleTag.textContent = scaleStyle;
+    document.head.appendChild(styleTag);
+  </script>
+</head>
+<body>
+  <iframe class="scaled-frame" src="http://localhost:8888"></iframe>
+</body>
+</html>
+

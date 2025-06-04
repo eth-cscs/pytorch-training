@@ -11,9 +11,9 @@ More specifically, the following topics will be covered:
 * Convolutional Neural Networks (CNNs) for computer vision: basics of CNNs, image classification and generation
 * Natural Language Processing (NLP) with transformers: basics of NLP, the transformer model, attention mechanism, etc.
 
-The lessons will blend theory with hands-on practice, using [PyTorch] for practical exercises. We will run these sessions on the [Piz Daint] supercomputer at [CSCS].
+The lessons will blend theory with hands-on practice, using [PyTorch] for practical exercises. We will run these sessions on the [Alps] supercomputer at [CSCS].
 
 [Hands-on Introduction to Deep Learning with PyTorch]: https://www.cscs.ch/publications/news/course-hands-on-introduction-to-deep-learning-with-pytorch
 [PyTorch]: https://pytorch.org/
 [CSCS]: https://www.cscs.ch/
-[Piz Daint]: https://www.cscs.ch/computers/piz-daint
+[Piz Daint]: https://www.cscs.ch/computers/alps
