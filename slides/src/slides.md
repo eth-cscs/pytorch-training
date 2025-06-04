@@ -84,7 +84,26 @@ transition: fade-out
 
 # Live Jupyter
 
-<iframe src="http://localhost:9000/jupyter-scaled.html?zoom=0.5" width="100%" height="400px" frameborder="0"></iframe>
+<iframe
+  src="http://localhost:9000/jupyter-scaled.html?zoom=0.5&notebook=cnn/solutions/CNN_Image_Classification_CIFAR-10.ipynb"
+  width="100%"
+  height="600px"
+  frameborder="0">
+</iframe>
+
+---
+transition: fade-out
+---
+
+
+# Live Jupyter Lab
+
+<iframe
+  src="http://localhost:9000/jupyter-scaled.html?zoom=0.5&notebook=cnn/solutions/CNN_Image_Classification_CIFAR-10.ipynb&lab=true"
+  width="100%"
+  height="600px"
+  frameborder="0">
+</iframe>
 
 ---
 transition: fade-out

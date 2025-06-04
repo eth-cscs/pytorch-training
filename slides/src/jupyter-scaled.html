@@ -1,15 +1,22 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <title>Jupyter Scaled</title>
   <script>
-    function getZoom() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const zoom = parseFloat(urlParams.get("zoom"));
-      return isNaN(zoom) ? 0.75 : zoom;
+    function getParams() {
+      const urlParams = new URLSearchParams(window.location.search)
+      return {
+        zoom: parseFloat(urlParams.get("zoom")) || 0.75,
+        notebook: urlParams.get("notebook") || "", // relative path
+        useLab: urlParams.get("lab") === "true",   // force lab view if desired
+      }
     }
 
-    const zoom = getZoom();
-    const scaleStyle = `
+    const { zoom, notebook, useLab } = getParams()
+
+    const styleTag = document.createElement('style')
+    styleTag.textContent = `
       html, body {
         margin: 0;
         padding: 0;
@@ -24,14 +31,24 @@
         border: none;
         display: block;
       }
-    `;
-    const styleTag = document.createElement('style');
-    styleTag.textContent = scaleStyle;
-    document.head.appendChild(styleTag);
+    `
+    document.head.appendChild(styleTag)
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const iframe = document.createElement("iframe")
+
+      let iframeSrc = "http://localhost:8888"
+      if (notebook) {
+        iframeSrc += useLab
+          ? `/lab/tree/${notebook}`       // full JupyterLab UI
+          : `/notebooks/${notebook}`      // minimal notebook view
+      }
+
+      iframe.className = "scaled-frame"
+      iframe.src = iframeSrc
+      document.body.appendChild(iframe)
+    })
   </script>
 </head>
-<body>
-  <iframe class="scaled-frame" src="http://localhost:8888"></iframe>
-</body>
+<body></body>
 </html>
-
