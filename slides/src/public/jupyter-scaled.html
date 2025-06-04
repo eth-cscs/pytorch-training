@@ -45,6 +45,7 @@
 
     window.addEventListener("DOMContentLoaded", () => {
       if (isLocalhost()) {
+        console.log('We think we are running on localhost')
         const iframe = document.createElement("iframe")
         iframe.className = "scaled-frame"
         iframe.src = `http://localhost:8888/${useLab ? "lab/tree/" : "notebooks/"}${notebook}`
