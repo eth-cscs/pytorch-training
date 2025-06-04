@@ -5,6 +5,9 @@ on:
     branches: [main]
     types: [opened, reopened, synchronize, closed]
 
+env:
+  DIST_DIR: preview-dist
+
 concurrency:
   group: preview-${{ github.ref }}
   cancel-in-progress: true
@@ -14,7 +17,7 @@ jobs:
     if: github.event.action != 'closed'
     uses: ./.github/workflows/build-steps.yml
     with:
-      output-dir: preview-dist
+      output-dir: ${{ env.DIST_DIR }}
 
   deploy-preview:
     if: github.event.action != 'closed'
@@ -23,10 +26,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          path: ${{ env.DIST_DIR }}
+
       - name: Upload PR preview
         uses: rossjrw/pr-preview-action@v1
         with:
-          source-dir: ./preview-dist
+          source-dir: ${{ env.DIST_DIR }}
           preview-branch: gh-pages
           umbrella-dir: pr-preview
           action: auto
