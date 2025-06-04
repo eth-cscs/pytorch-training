@@ -2,7 +2,9 @@ name: Deploy Slidev to GitHub Pages
 
 on:
   push:
-    branches: [slidev]
+    branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -35,7 +37,6 @@ jobs:
           pnpm install
 
       - name: Build Slidev
-        #run: pnpm build --base /${{ github.event.repository.name }}/ --out ../../dist
         run: pnpm build --base / --out ../../dist
 
       - name: Setup GitHub Pages
@@ -46,13 +47,14 @@ jobs:
         with:
           path: dist
 
-  #deploy:
-  #  needs: build
-  #  runs-on: ubuntu-latest
-  #  environment:
-  #    name: github-pages
-  #    url: ${{ steps.deployment.outputs.page_url }}
-  #  steps:
-  #    - name: Deploy to GitHub Pages
-  #      id: deployment
-  #      uses: actions/deploy-pages@v4
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+      deployment: true
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
