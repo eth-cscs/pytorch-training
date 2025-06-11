@@ -2,7 +2,7 @@ name: Deploy Slidev to GitHub Pages
 
 on:
   push:
-    branches: [main, slidev]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
