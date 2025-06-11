@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Jupyter Scaled</title>
+  <script>
+    function getParams() {
+      const urlParams = new URLSearchParams(window.location.search)
+      return {
+        zoom: parseFloat(urlParams.get("zoom")) || 0.75,
+        notebook: urlParams.get("notebook") || "", // relative path
+        useLab: urlParams.get("lab") === "true",   // force lab view if desired
+      }
+    }
+    function isLocalhost() {
+      return location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+    }
+
+    const { zoom, notebook, useLab } = getParams()
+
+    const styleTag = document.createElement('style')
+    styleTag.textContent = `
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+      }
+      .scaled-frame {
+        transform: scale(${zoom});
+        transform-origin: top left;
+        width: calc(100% / ${zoom});
+        height: calc(100% / ${zoom});
+        border: none;
+        display: block;
+      }
+      .fallback-message {
+        color: #444;
+        font-size: 1.2rem;
+        padding: 2rem;
+        text-align: center;
+      }
+    `
+    document.head.appendChild(styleTag)
+
+    window.addEventListener("DOMContentLoaded", () => {
+      if (isLocalhost()) {
+        const iframe = document.createElement("iframe")
+        iframe.className = "scaled-frame"
+        const nonce = Math.random().toString(36).slice(2)
+        iframe.src = `http://localhost:8888/${useLab ? "lab/tree/" : "notebooks/"}${notebook}?v=${nonce}`
+        document.body.appendChild(iframe)
+      } else {
+        const msg = document.createElement("div")
+        msg.className = "fallback-message"
+        msg.textContent = `⚠️ The notebook "${notebook}" can only be viewed when running locally with JupyterLab.`
+        document.body.appendChild(msg)
+      }
+    })
+  </script>
+</head>
+<body></body>
+</html>
