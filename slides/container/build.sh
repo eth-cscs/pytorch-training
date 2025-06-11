@@ -3,8 +3,13 @@ set -euo pipefail
 
 cd "$(dirname "$0")"
 
-command -v podman &>/dev/null && ocirun="podman"
-command -v docker &>/dev/null && ocirun="docker"
+if command -v podman &>/dev/null; then
+   OCIRUN="podman"
+elif command -v docker &>/dev/null; then
+  OCIRUN="docker"
+else
+  echo "Error: podman or docker not found" >&2
+  exit 1
+fi
 
-$ocirun build -t slidev-pytorch -f Containerfile .
-
+$OCIRUN build -t slidev-pytorch -f Containerfile .

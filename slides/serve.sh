@@ -5,10 +5,10 @@ set -euo pipefail
 cd "$(dirname "$0")"
 
 # Detect container engine
-if command -v docker &>/dev/null; then
+if command -v podman &>/dev/null; then
+   OCIRUN="podman"
+elif command -v docker &>/dev/null; then
   OCIRUN="docker"
-elif command -v podman &>/dev/null; then
-  OCIRUN="podman"
 else
   echo "Error: podman or docker not found" >&2
   exit 1
@@ -61,14 +61,23 @@ python3 -m http.server 9000 --directory /slides & \
 cd /slides && pnpm install && pnpm dev --remote -o false
 '
 
+GPU=""
+if command -v nvidia-smi &>/dev/null; then
+  if [ "$OCIRUN" = "podman" ]; then
+    GPU="--device nvidia.com/gpu=all"
+  else
+    GPU="--gpus all --ipc=host --ulimit memlock=-1 --ulimit stack=67108864"
+  fi
+fi
+
 # Run the container
 if [ "$OCIRUN" = "podman" ]; then
   $OCIRUN run "${COMMON_OPTS[@]}" \
-    --userns=keep-id \
+    ${GPU} --userns=keep-id \
     --user "$USER_ID:$GROUP_ID" \
     "$IMAGE_NAME" bash -c "$CMD"
 else
   $OCIRUN run "${COMMON_OPTS[@]}" \
-    --user "$USER_ID:$GROUP_ID" \
+    ${GPU} --user "$USER_ID:$GROUP_ID" \
     "$IMAGE_NAME" bash -c "$CMD"
 fi
