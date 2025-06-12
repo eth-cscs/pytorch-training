@@ -2,7 +2,7 @@
 layout: section
 ---
 
-# Data Representation and Featurisation
+# Data Representation and Featurization
 
 ---
 
@@ -194,7 +194,7 @@ torch.nn.Conv2d(
 
 ---
 
-# TEXT FEATURISATION
+# TEXT FEATURIZATION
 
 * Bag of Words (BoW)
 * Embeddings

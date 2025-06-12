@@ -94,7 +94,7 @@ We need Convolutional Neural Networks (CNNs)!
 * Linear operation
 * Weights shared across pixels 
   * Reduces number of parameters
-* An output pixel depends on neighbouring input pixels 
+* An output pixel depends on neighboring input pixels 
   * Retains spatial information
 
 </v-clicks>
@@ -105,8 +105,8 @@ We need Convolutional Neural Networks (CNNs)!
 
 * Input: $100 \times 100$ pixel, 3 color channels
 * Convolutional kernel: $5 \times 5$
-* Bias: trueì
-* Ouptut: $200$ feature maps ($100 \timex 100$ pixels each)
+* Bias: true
+* Output: $200$ feature maps ($100 \timex 100$ pixels each)
 
 How many parameters (connections) are there for the first layer?
 
