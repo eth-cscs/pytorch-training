@@ -1,0 +1,12 @@
+FROM ubuntu:24.04
+
+# Install Node.js (Slidev needs it)
+RUN apt-get update && apt-get install -y curl gnupg xdg-utils && \
+    curl -fsSL https://deb.nodesource.com/setup_24.x | bash - && \
+    apt-get install -y nodejs && \
+    npm i -g pnpm
+
+WORKDIR /workspace
+
+EXPOSE 8888 3030
+CMD ["bash"]

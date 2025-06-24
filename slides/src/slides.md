@@ -43,69 +43,25 @@ contextMenu: false
 ETH Zurich - Swiss National Supercomputing Centre (CSCS)<br/>
 2-4 July 2025, Lugano<br/>
 
-<div @click="$slidev.nav.next" class="mt-12 py-1" hover:bg="white op-10">
-  Press Space for next page <carbon:arrow-right />
-</div>
+<!--<div @click="$slidev.nav.next" class="mt-12 py-1" hover:bg="white op-10">-->
+<!--  Press Space for next page <carbon:arrow-right />-->
+<!--</div>-->
 
 ---
 src: ./1.1-introduction/section-slides.md
 hide: false
 ---
 
-<!-- Content here is ignored -->
-
+---
+src: ./2.1-featurisation/section-slides.md
+hide: false
 ---
 
-<!--
-# Welcome to Slidev
-
-Presentation slides for developers
-
-<div @click="$slidev.nav.next" class="mt-12 py-1" hover:bg="white op-10">
-  Press Space for next page <carbon:arrow-right />
-</div>
-
-<div class="abs-br m-6 text-xl">
-  <button @click="$slidev.nav.openInEditor()" title="Open in Editor" class="slidev-icon-btn">
-    <carbon:edit />
-  </button>
-  <a href="https://github.com/slidevjs/slidev" target="_blank" class="slidev-icon-btn">
-    <carbon:logo-github />
-  </a>
-</div>
--->
-<!--
-The last comment block of each slide will be treated as slide notes. It will be visible and editable in Presenter Mode along with the slide. [Read more in the docs](https://sli.dev/guide/syntax.html#notes)
--->
-
 ---
-transition: fade-out
+src: ./2.2-cnn/section-slides.md
+hide: false
 ---
 
-# Live Jupyter
-
-<iframe
-  src="jupyter-scaled.html?zoom=0.5&notebook=cnn/solutions/CNN_Image_Classification_CIFAR-10.ipynb"
-  width="100%"
-  height="600px"
-  frameborder="0">
-</iframe>
-
----
-transition: fade-out
----
-
-
-# Live Jupyter Lab
-
-<iframe
-  src="jupyter-scaled.html?zoom=0.5&notebook=cnn/solutions/CNN_Image_Classification_CIFAR-10.ipynb&lab=true"
-  width="100%"
-  height="600px"
-  frameborder="0">
-</iframe>
-
----
 transition: fade-out
 ---
 
