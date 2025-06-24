@@ -62,6 +62,11 @@ src: ./2.2-cnn/section-slides.md
 hide: false
 ---
 
+---
+src: ./3.1-more_on_training/section-slides.md
+hide: false
+---
+
 transition: fade-out
 ---
 
