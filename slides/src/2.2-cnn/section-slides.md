@@ -137,8 +137,9 @@ $(5 \times 5 \times 3 + 1) \times 200 = 15,200$ parameters!
 </div>
 </div>
 
-
+<div class="text-xs text-center mt-8">
 https://github.com/HarisIqbal88/PlotNeuralNet
+</div>
 
 --- 
 

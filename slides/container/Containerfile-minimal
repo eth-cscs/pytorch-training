@@ -7,7 +7,6 @@ RUN apt-get update && apt-get install -y curl gnupg xdg-utils && \
     npm i -g pnpm
 
 WORKDIR /workspace
-#COPY . /workspace
 
 EXPOSE 8888 3030
 CMD ["bash"]
