@@ -2,11 +2,7 @@
 layout: section
 ---
 
-# Data Representation and Featurization
-
----
-
-# ML vs DL
+# Working with Images
 
 ---
 
@@ -193,12 +189,15 @@ torch.nn.Conv2d(
 `padding="same"` automatically adds padding to keep the output size the same as the input size.
 
 ---
+layout: section
+---
 
-# TEXT FEATURIZATION
+# Working with Text
 
-* Bag of Words (BoW)
-* Embeddings
-* Word2Vec
-* Positional encoding
+---
+
+# TODO
+
+@Rafael
 
 ---

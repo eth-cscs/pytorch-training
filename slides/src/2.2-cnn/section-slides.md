@@ -130,14 +130,15 @@ $(5 \times 5 \times 3 + 1) \times 200 = 15,200$ parameters!
 * Pooling layers
 * Activation functions
 * Normalization layers
-  * Batch normalization
-  * Local response normalization
 * Fully connected layers
 
 </v-clicks> 
 
 </div>
 </div>
+
+
+https://github.com/HarisIqbal88/PlotNeuralNet
 
 --- 
 
@@ -389,3 +390,42 @@ output.size()
 
 </div>
 </div>
+
+---
+
+# CNN Zoo
+
+Many CNN architectures:
+
+* LeNet 5
+* AlexNet (winner of ImageNet 2012)
+  * Local response normalization
+* VGG16/VGG19 (runner-up of ImageNet 2014)
+* ResNet (winner of ImageNet 2015)
+  * Batch normalisation
+  * Residual connections
+  
+---
+
+# What have we missed?
+
+* Classification and localisation
+  * Regression problem for bounding boxes
+* Object detection
+  * Classification and localisation for multiple objects
+* Semantic segmentation
+  * Classification for each pixel (car, road, sky, etc.)
+* Vision Transformers (ViT)
+* ...
+
+---
+
+# [lab] CNN for Image Classifiaction of CIFAR-10
+
+Implement and train a CNN from scratch for image classification:
+
+* Load and inspect the dataset
+* Implement a simple CNN architecture
+* Implement the training loop
+* Train the CNN
+* Evaluate the CNN performance
