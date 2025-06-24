@@ -8,7 +8,9 @@ layout: section
 
 # Bias-Variance Tradeoff
 
-???
+<AdmonitionType type="caution" width="300px">
+Add discussion about bias-variance tradeoff?
+</AdmonitionType>
 
 ---
 
@@ -16,7 +18,12 @@ layout: section
 
 Overfitting happens when a model has too many parameters compared to the training data.
 
-![Polynomial fit](./imgs/polyfit.png)
+<style>
+    img {
+        margin: auto;
+    }
+</style>
+<img src="./imgs/polyfit.png" class="h-90" style="margin"/>
 
 ---
 
@@ -202,7 +209,9 @@ Dropout layers randomly zero some elements of the input with probability $p$.
 
 The output is scaled by $1/(1-p)$.
 
-XXX IMAGE???
+<AdmonitionType type="caution" width="300px">
+Add image about dropout layers.
+</AdmonitionType>
 
 ---
 
@@ -268,7 +277,12 @@ transforms = v2.Compose([
 </div>
 <div>
 
-![XKCD](./imgs/machine_learning.png)
+<style>
+    img {
+        margin: auto;
+    }
+</style>
+<img src="./imgs/machine_learning.png" class="h-80" style="margin"/>
 
 <div class="text-xs text-center mt-8">
 https://xkcd.com/1838/
