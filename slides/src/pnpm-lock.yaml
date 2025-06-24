@@ -11,6 +11,24 @@ importers:
 
   .:
     dependencies:
+      '@iconify-json/logos':
+        specifier: ^1.1.42
+        version: 1.2.4
+      '@iconify-json/mdi':
+        specifier: ^1.1.66
+        version: 1.2.3
+      '@iconify-json/twemoji':
+        specifier: ^1.1.15
+        version: 1.2.2
+      '@iconify-json/uim':
+        specifier: ^1.1.9
+        version: 1.2.3
+      '@iconify/json':
+        specifier: ^2.2.221
+        version: 2.2.352
+      '@iconify/vue':
+        specifier: ^4.1.2
+        version: 4.3.0(vue@3.5.16(typescript@5.8.3))
       '@slidev/cli':
         specifier: ^51.8.1
         version: 51.8.1(@babel/parser@7.27.5)(@nuxt/kit@3.17.5)(@types/markdown-it@14.1.2)(@types/node@22.15.29)(@vue/compiler-sfc@3.5.16)(markdown-it-async@2.2.0)(playwright-chromium@1.52.0)(postcss@8.5.4)
@@ -346,17 +364,37 @@ packages:
   '@iconify-json/carbon@1.2.8':
     resolution: {integrity: sha512-6xh4YiFBz6qoSnB3XMe23WvjTJroDFXB17J1MbiT7nATFe+70+em1acRXr8hgP/gYpwFMHFc4IvjA/IPTPnTzg==}
 
+  '@iconify-json/logos@1.2.4':
+    resolution: {integrity: sha512-XC4If5D/hbaZvUkTV8iaZuGlQCyG6CNOlaAaJaGa13V5QMYwYjgtKk3vPP8wz3wtTVNVEVk3LRx1fOJz+YnSMw==}
+
+  '@iconify-json/mdi@1.2.3':
+    resolution: {integrity: sha512-O3cLwbDOK7NNDf2ihaQOH5F9JglnulNDFV7WprU2dSoZu3h3cWH//h74uQAB87brHmvFVxIOkuBX2sZSzYhScg==}
+
   '@iconify-json/ph@1.2.2':
     resolution: {integrity: sha512-PgkEZNtqa8hBGjHXQa4pMwZa93hmfu8FUSjs/nv4oUU6yLsgv+gh9nu28Kqi8Fz9CCVu4hj1MZs9/60J57IzFw==}
 
   '@iconify-json/svg-spinners@1.2.2':
     resolution: {integrity: sha512-DIErwfBWWzLfmAG2oQnbUOSqZhDxlXvr8941itMCrxQoMB0Hiv8Ww6Bln/zIgxwjDvSem2dKJtap+yKKwsB/2A==}
 
+  '@iconify-json/twemoji@1.2.2':
+    resolution: {integrity: sha512-ckWEY5KhIQgdFd9VGvfhecTtYUx3ihXycwlZcEws87LxuvIThMHNBCblrQQ5afhbGMfg21dF+z9F+ODMRDYHMg==}
+
+  '@iconify-json/uim@1.2.3':
+    resolution: {integrity: sha512-rCOU5nrRbcg5s5ZhL9Esoj/acyPeb6hPetVQYMJ18/wJwYsQtcwrFJXy6XOwyFs9TTLnjFGynLJO/TYihOQtDg==}
+
+  '@iconify/json@2.2.352':
+    resolution: {integrity: sha512-UtX9HPDYQDOoPtrb2m05mUOeFpVWWelfkNlamFEKyTIoB0Ma4fPJdqxfpYhylBrfvum6QVpAbq3EEcBr0TYkmg==}
+
   '@iconify/types@2.0.0':
     resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
 
   '@iconify/utils@2.3.0':
     resolution: {integrity: sha512-GmQ78prtwYW6EtzXRU1rY+KwOKfz32PD7iJh6Iyqw68GiKuoZ2A6pRtzWONz5VQJbp50mEjXh/7NkumtrAgRKA==}
+
+  '@iconify/vue@4.3.0':
+    resolution: {integrity: sha512-Xq0h6zMrHBbrW8jXJ9fISi+x8oDQllg5hTDkDuxnWiskJ63rpJu9CvJshj8VniHVTbsxCg9fVoPAaNp3RQI5OQ==}
+    peerDependencies:
+      vue: '>=3'
 
   '@jridgewell/gen-mapping@0.3.8':
     resolution: {integrity: sha512-imAbBGkb+ebQyxKgzv5Hu2nmROxoDOXHh80evxdoXNOrvAnVx7zimzc1Oo5h9RlfV4vPXaE2iM5pOFbvOCClWA==}
@@ -3005,6 +3043,14 @@ snapshots:
     dependencies:
       '@iconify/types': 2.0.0
 
+  '@iconify-json/logos@1.2.4':
+    dependencies:
+      '@iconify/types': 2.0.0
+
+  '@iconify-json/mdi@1.2.3':
+    dependencies:
+      '@iconify/types': 2.0.0
+
   '@iconify-json/ph@1.2.2':
     dependencies:
       '@iconify/types': 2.0.0
@@ -3012,6 +3058,19 @@ snapshots:
   '@iconify-json/svg-spinners@1.2.2':
     dependencies:
       '@iconify/types': 2.0.0
+
+  '@iconify-json/twemoji@1.2.2':
+    dependencies:
+      '@iconify/types': 2.0.0
+
+  '@iconify-json/uim@1.2.3':
+    dependencies:
+      '@iconify/types': 2.0.0
+
+  '@iconify/json@2.2.352':
+    dependencies:
+      '@iconify/types': 2.0.0
+      pathe: 1.1.2
 
   '@iconify/types@2.0.0': {}
 
@@ -3027,6 +3086,11 @@ snapshots:
       mlly: 1.7.4
     transitivePeerDependencies:
       - supports-color
+
+  '@iconify/vue@4.3.0(vue@3.5.16(typescript@5.8.3))':
+    dependencies:
+      '@iconify/types': 2.0.0
+      vue: 3.5.16(typescript@5.8.3)
 
   '@jridgewell/gen-mapping@0.3.8':
     dependencies:
