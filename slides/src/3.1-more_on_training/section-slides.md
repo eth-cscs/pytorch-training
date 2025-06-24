@@ -16,7 +16,7 @@ layout: section
 
 Overfitting happens when a model has too many parameters compared to the training data.
 
-XXX
+![Polynomial fit](./imgs/polyfit.png)
 
 ---
 
@@ -25,7 +25,7 @@ XXX
 <div grid="~ cols-2 gap-4">
 <div>
 
-XXX
+![Loss functions](./imgs/loss.png)
 
 </div>
 <div>
@@ -114,7 +114,7 @@ optimizer.load_state_dict(
 `state_dict()` returns a reference to the model's parameters.
 
 <AdmonitionType type="warning">
-Use `copy.deepcopy` to copy the state dictionary.
+Use a deep copy to copy the state dictionary.
 </AdmonitionType>
 
 
@@ -174,12 +174,12 @@ Reducing the model capacity (number of parameters) can reduce over-fitting.
 <div grid="~ cols-2 gap-4">
 <div>
 
-XXX
+![Polynomial fit](./imgs/polyfit.png)
 
 </div>
 <div>
 
-## Computing the Number of Parameters
+### Number of Parameters
 
 ```python
 num_elements_list = [
@@ -268,7 +268,11 @@ transforms = v2.Compose([
 </div>
 <div>
 
-XXX
+![XKCD](./imgs/machine_learning.png)
+
+<div class="text-xs text-center mt-8">
+https://xkcd.com/1838/
+</div>
 
 </div>
 </div>
@@ -377,7 +381,8 @@ for param in model.parameters()[:-1]:
 
 n_in_features = model[-1].in_features
 
-# Swap last linear layer with another (untrained) one
+# Swap last linear layer
+# with another (untrained) linear layer
 model[-1] = nn.Linear(n_in_features, 5)
 ```
 
@@ -386,22 +391,76 @@ model[-1] = nn.Linear(n_in_features, 5)
 
 ---
 
-# Hyperparameter Tuning and 
+# PyTorch Ecosystem
 
 Hyper-parameters can have a huge impact on the model, and the hyperparameter space is large.
 
-* Ray Tune (\url{https://docs.ray.io})
-* Optuna (\url{https://optuna.org})
-* Hyperopt (\url{http://hyperopt.github.io/hyperopt/})
+* Ray Tune (https://docs.ray.io)
+* Optuna (https://optuna.org)
+* Hyperopt (http://hyperopt.github.io/hyperopt/)
 * ...
 
 PyTorch is rather bare-bones. There are many library built on top of it which require to write less code:
 
-* PyTorch Ignite
-* PyTorch Lightning
-* FastAI
-* Keras 3.0 (PyTorch, TensorFlow, JAX)
+* PyTorch Ignite (https://pytorch-ignite.ai)
+* PyTorch Lightning (https://lightning.ai/pytorch-lightning)
+* FastAI (https://www.fast.ai)
+* Keras 3.0 (https://keras.io)
 * ...
+
+---
+
+# Keras 3.0 Example
+
+<div grid="~ cols-2 gap-4">
+<div>
+
+## Model Definition
+
+```python {all|1|2|3-6|7-9|11|12-15|none}
+model = keras.Sequential([
+  keras.Input(shape=input_shape),
+  layers.Conv2D(32, 
+    kernel_size=(3, 3),
+    activation="relu"
+  ),
+  layers.MaxPooling2D(
+    pool_size=(2, 2)
+  ),
+  ...
+  layers.Flatten(),
+  layers.Dense(
+    num_classes,
+    activation="softmax"
+  )])
+```
+
+</div>
+<div>
+
+## Training and Inference
+
+```python {none|1-5|7-12|14-16}
+model.compile(
+  loss="categorical_crossentropy",
+  optimizer="adam", 
+  metrics=["accuracy"]
+)
+
+model.fit(
+  x_train, y_train, 
+  batch_size=batch_size,
+  epochs=epochs, 
+  validation_split=0.1
+)
+
+score = model.evaluate(
+  x_test, y_test, verbose=0
+)
+```
+
+</div>
+</div>
 
 ---
 
