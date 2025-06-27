@@ -65,6 +65,12 @@ transform = transforms.Compose([
 
 ---
 
+# Convolutional Filters: Edge Detection
+
+![Edge Detection](./imgs/sobel_v.png)
+
+---
+
 # Convolution Operation
 
 $$

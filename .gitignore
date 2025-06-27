@@ -6,3 +6,5 @@ data/
 
 #macos
 .DS_Store
+
+slides/src/.cache/
