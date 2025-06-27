@@ -40,7 +40,7 @@ contextMenu: false
 
 # Hands-on Introduction to Deep Learning with PyTorch
 
-Swiss National Supercomputing Centre (CSCS) - ETH Zurich<br/>
+ETH Zurich - Swiss National Supercomputing Centre (CSCS)<br/>
 2-4 July 2025, Lugano<br/>
 
 <!--<div @click="$slidev.nav.next" class="mt-12 py-1" hover:bg="white op-10">-->
@@ -59,11 +59,6 @@ hide: false
 
 ---
 src: ./2.2-cnn/section-slides.md
-hide: false
----
-
----
-src: ./3.1-more_on_training/section-slides.md
 hide: false
 ---
 
@@ -573,7 +568,7 @@ Learn more: [Mermaid Diagrams](https://sli.dev/features/mermaid) and [PlantUML D
 ---
 foo: bar
 dragPos:
-  square: 489,181,167,_,27
+  square: 681,20,167,_,27
 ---
 
 # Draggable Elements
@@ -599,7 +594,7 @@ Double-click on the draggable elements to edit their positions.
 </v-drag>
 ```
 
-<v-drag pos="555,392,261,_,-15">
+<v-drag pos="663,206,261,_,-15">
   <div text-center text-3xl border border-main rounded>
     Double-click me!
   </div>

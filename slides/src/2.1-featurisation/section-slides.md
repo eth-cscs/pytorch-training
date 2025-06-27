@@ -14,7 +14,7 @@ layout: section
 
 # (Color) Images are Tensors
 
-<img src="./imgs/image_rgb_as_data.png" />
+![Color Image](./imgs/image_rgb_as_data.png)
 
 ---
 
@@ -86,8 +86,6 @@ $$
 </v-clicks>
 
 ---
-transition: none
---- 
 
 # Convolution Operation: Visual Representation
 
@@ -109,8 +107,6 @@ transition: none
 Dumoulin, Vincent, and Francesco Visin. "A guide to convolution arithmetic for deep learning." arXiv preprint arXiv:1603.07285 (2016).
 </div>
 
----
-transition: none
 --- 
 
 # Convolution Operation: Visual Representation
@@ -133,8 +129,6 @@ transition: none
 Dumoulin, Vincent, and Francesco Visin. "A guide to convolution arithmetic for deep learning." arXiv preprint arXiv:1603.07285 (2016).
 </div>
 
----
-transition: none
 --- 
 
 # Convolution Operation: Visual Representation

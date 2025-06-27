@@ -30,23 +30,14 @@ layout: section
 <div grid="~ cols-2 gap-4">
 <div>
 
-<style>
-  img {
-    margin: auto;
-  }
-</style>
-<img src="./imgs/airplanes-cifar10.png" class="h-90"/>
+![Airplanes](./imgs/airplanes-cifar10.png)
 
 </div>
 <div>
 
 <v-clicks>
 
-* Variability in appearance
-  * Lighting
-  * Angle
-  * Occlusion
-  * ...
+* Variability in appearance (lighting, angle, occlusion)
 * Different object scales and orientations
 * Background clutter
 * Limited labeled data
@@ -171,8 +162,6 @@ torch.nn.Conv2d(
 
 `padding="same"` automatically adds padding to keep the output size the same as the input size.
 
----
-transition: none
 --- 
 
 # PyTorch: Pooling
@@ -210,8 +199,6 @@ torch.nn.AvgPool2d(
 </div>
 
 ---
-transition: none
----
 
 # PyTorch: Pooling
 
@@ -248,8 +235,6 @@ torch.nn.AvgPool2d(
 </div>
 
 ---
-transition: none
----
 
 # PyTorch: Pooling
 
@@ -285,8 +270,6 @@ torch.nn.AvgPool2d(
 </div>
 </div>
 
----
-transition: none
 ---
 
 # PyTorch: Pooling
