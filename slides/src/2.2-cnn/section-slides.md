@@ -425,6 +425,15 @@ Many CNN architectures:
   
 ---
 
+# Binary Classification
+
+--- 
+
+# Multi-Class Classification
+
+---
+
+
 # What have we missed?
 
 * Classification and localisation
