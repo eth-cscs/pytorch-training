@@ -66,7 +66,11 @@ layout: section
 
 How many parameters (connections) are there between the input and fist hidden layer?
 
+<v-click>
+
 $100 \times 100 \times 1000 = 10,000,000$ parameters!
+
+</v-click>
 
 ---
 
@@ -87,9 +91,15 @@ $100 \times 100 \times 1000 = 10,000,000$ parameters!
 
 </v-clicks> 
 
-How can *spatial information* be *preserved* and *exploited*?
+<v-click>
+How can <i>spatial information</i> be <i>preserved</i> and <i>exploited</i>?
+</v-click>
 
+<br><br>
+
+<v-click>
 We need Convolutional Neural Networks (CNNs)!
+</v-click> 
 
 </div>
 </div>
@@ -115,11 +125,15 @@ We need Convolutional Neural Networks (CNNs)!
 * Input: $100 \times 100$ pixel, 3 color channels
 * Convolutional kernel: $5 \times 5$
 * Bias: true
-* Output: $200$ feature maps ($100 \timex 100$ pixels each)
+* Output: $200$ feature maps ($100 \times 100$ pixels each)
 
 How many parameters (connections) are there for the first layer?
 
+<v-click>
+
 $(5 \times 5 \times 3 + 1) \times 200 = 15,200$ parameters!
+
+</v-click>
 
 ---
 
@@ -128,7 +142,7 @@ $(5 \times 5 \times 3 + 1) \times 200 = 15,200$ parameters!
 <div grid="~ cols-2 gap-4">
 <div>
 
-![CNN](./imgs/lenet.png)
+![CNN](./imgs/lenet-cropped.png)
 
 </div>
 <div>
@@ -145,6 +159,11 @@ $(5 \times 5 \times 3 + 1) \times 200 = 15,200$ parameters!
 
 </div>
 </div>
+
+CNNs for classification have two conceptual building blocks:
+
+* Feature extractor (convolution layers)
+* Classifier (linear layers)
 
 <div class="text-xs text-center mt-8">
 https://github.com/HarisIqbal88/PlotNeuralNet
@@ -420,17 +439,89 @@ Many CNN architectures:
   * Local response normalization
 * VGG16/VGG19 (runner-up of ImageNet 2014)
 * ResNet (winner of ImageNet 2015)
-  * Batch normalisation
+  * Batch normalization
   * Residual connections
   
 ---
 
+# Binary Classification
+
+Classify images into two classes. The model predict the probability $p_i$ of one class.
+
+$$
+\mathcal{L} = -\frac{1}{N} \sum_{i=1}^{N} \left( y_i \log(p_i) + (1 - y_i) \log(1 - p_i) \right)
+$$
+
+```python {5,7}
+import torch.nn.functional as F
+
+def forward(self, x):
+    # ...
+    return F.sigmoid(x)
+
+loss = nn.BCELoss()
+```
+
+--- 
+
+# Multi-Class Classification: Probabilities
+
+Classify images into multiple classes. The output of the model, a vector of $N$ classes,
+can be converted to a probability distribution.
+
+$$
+  \text{softmax}(x_i) = \frac{e^{x_i}}{\sum_{j=1}^{C} e^{x_j}}
+$$
+
+The model predict the probability $p_{ij}$ for each class $j$ of sample $i$.
+
+---
+
+# Multi-Class Classification: Loss Function
+
+Generalization of the binary cross-entropy loss function to multiple classes:
+
+$$
+\mathcal{L} = -\frac{1}{N} \sum_{i=1}^{N} \sum_{j=1}^{C} y_{ij} \log(p_{ij})
+$$
+
+<div grid="~ cols-2 gap-4">
+<div>
+
+```python {5,7}
+import torch.nn.functional as F
+
+def forward(self, x):
+    # ...
+    return F.softmax(x, dim=1)
+
+loss = nn.CrossEntropyLoss()
+```
+
+</div>
+<div>
+
+```python {5,7}
+import torch.nn.functional as F
+
+def forward(self, x):
+    # ...
+    return F.log_softmax(x, dim=1)
+
+loss = nn.NLLLoss()
+```
+
+</div>
+</div>
+
+---
+
 # What have we missed?
 
-* Classification and localisation
+* Classification and localization
   * Regression problem for bounding boxes
 * Object detection
-  * Classification and localisation for multiple objects
+  * Classification and localization for multiple objects
 * Semantic segmentation
   * Classification for each pixel (car, road, sky, etc.)
 * Vision Transformers (ViT)
@@ -438,7 +529,7 @@ Many CNN architectures:
 
 ---
 
-# [lab] CNN for Image Classifiaction of CIFAR-10
+# \[LAB\] CNN for Image Classification of CIFAR-10
 
 Implement and train a CNN from scratch for image classification:
 

@@ -18,30 +18,9 @@ layout: section
 
 ---
 
-# PyTorch: `torchvision.transform`s (V1)
-
-```python {1,3,12|5|8-11}
-from torchvision import transforms
-
-transform = transforms.Compose([
-    # Convert PIL image to tensor (and scale values)
-    transforms.ToTensor(), # Deprecated in V2
-    # Apply other transforms
-    # Apply normalization
-    transforms.Normalize(
-      mean=[0.485, 0.456, 0.406], 
-      std=[0.229, 0.224, 0.225]
-    ),
-])
-```
-
-`ToTensor` is <span v-mark.circle.orange>deprecated in V2</span>.
-
----
-
 # PyTorch: `torchvision.transform.v2`s (V2)
 
-```python {1,3,13|5|8|10-12}
+```python {1,3,13|5|6|8|10-13}
 import torchvision.transforms.v2 as transforms
 
 transform = transforms.Compose([
@@ -53,9 +32,18 @@ transform = transforms.Compose([
     # Apply normalization
     transforms.Normalize(
       mean=[0.485, 0.456, 0.406],
-      std=[0.229, 0.224, 0.225])
+      std=[0.229, 0.224, 0.225]
+    )
 ])
 ```
+
+---
+
+# Images: 1D vs 2D Representation
+
+<img src="./imgs/2D_to_1D.png" class="h-60"/>
+
+How can *spatial information* be *preserved* and *exploited*?
 
 ---
 
@@ -199,17 +187,3 @@ torch.nn.Conv2d(
 ```
 
 `padding="same"` automatically adds padding to keep the output size the same as the input size.
-
----
-layout: section
----
-
-# Working with Text
-
----
-
-# TODO
-
-@Rafael
-
----

@@ -6,24 +6,20 @@ layout: section
 
 ---
 
-# Bias-Variance Tradeoff
-
-<AdmonitionType type="caution" width="300px">
-Add discussion about bias-variance tradeoff?
-</AdmonitionType>
-
----
-
 # Overfitting
 
 Overfitting happens when a model has too many parameters compared to the training data.
+
+$$
+  f(x) \approx \sum_i w_i x^i
+$$
 
 <style>
     img {
         margin: auto;
     }
 </style>
-<img src="./imgs/polyfit.png" class="h-90" style="margin"/>
+<img src="./imgs/polyfit.png" class="h-75" style="margin"/>
 
 ---
 
@@ -37,11 +33,11 @@ Overfitting happens when a model has too many parameters compared to the trainin
 </div>
 <div>
 
-Low training loss and hight validation loss indicate overfitting.
+Low training loss and high validation loss indicate overfitting.
 
-The large gap represents the generalisation error.
+The large gap represents the generalization error.
 
-The model was perfmorming better early on in the training, but then started to overfit.
+The model was performing better early on in the training, but then started to overfit.
 
 </div>
 </div>
@@ -138,6 +134,13 @@ best_model_state = deepcopy(model.state_dict())
 
 We can add constraints on the model (model weights) via the loss function.
 
+Regularization puts constraints on the model weights:
+
+* $L_2$ regularization encourages decay towards zero unless supported by data
+* $L_1$ regularization encourages sparsity (many weights close to zero)
+
+Controlling the model complexity by regularization has similar effects as reducing the model capacity (number of parameters).
+
 ---
 
 # PyTorch: $L_2$ Regularization
@@ -146,7 +149,7 @@ $$
 L_2 = \lambda \sum_{i} w_i^2
 $$
 
-The $L_2$ regularisation term is available in PyTorch via the `weight_decay` argument of the optimizer.
+The $L_2$ regularization term is available in PyTorch via the `weight_decay` argument of the optimizer.
 
 ---
 
@@ -156,7 +159,7 @@ $$
 L_1 = \lambda \sum_{i} |w_i|
 $$
 
-The $L_1$ regularisation term produces a sparse model (many weights close to zero).
+The $L_1$ regularization term produces a sparse model (many weights close to zero).
 
 This term is not available in PyTorch optimizers, but can be implemented manually.
 
@@ -209,15 +212,19 @@ Dropout layers randomly zero some elements of the input with probability $p$.
 
 The output is scaled by $1/(1-p)$.
 
-<AdmonitionType type="caution" width="300px">
-Add image about dropout layers.
-</AdmonitionType>
+
+```python
+nn.Dropout(p=0.5)
+```
+
+<img src="./imgs/dropout.png"/>
+
 
 ---
 
 # Training and Evaluation Phases
 
-Some layers behave differently during training and evaluation (dropout, batch normalisation, ...).
+Some layers behave differently during training and evaluation (dropout, batch normalization, ...).
 
 ```python
 model.train()
@@ -226,6 +233,50 @@ model.train()
 ```python
 model.eval()
 ```
+
+---
+
+# Skip Connections and Residual Learning
+
+<div grid="~ cols-2 gap-4">
+<div>
+
+<img src="./imgs/skip_connection.png" class="h-60"/>
+
+* Speed-up training
+* Facilitate signal propagation
+* Reduce vanishing/exploding gradients problem
+
+<div class="text-xs text-center mt-8">
+Géron, Aurélien. Hands-on machine learning with Scikit-Learn, Keras, and TensorFlow, O’Reilly Media, Inc., 2022
+</div>
+
+
+</div>
+<div>
+
+```python {all|3,12}
+# torchvision/models/resnet.py
+def forward(self, x):
+  identity = x
+
+  out = self.conv1(x)
+  out = self.bn1(out)
+  out = self.relu(out)
+
+  out = self.conv2(out)
+  out = self.bn2(out)
+
+  out += identity
+  out = self.relu(out)
+
+  return out
+```
+
+Here we can't use `nn.Sequential`.
+
+</div>
+</div>
 
 ---
 
@@ -240,11 +291,11 @@ transforming the data (on-the-fly) at each iteration.
 * Random crops
 * ...
 
-Data augmentation helps reducing overfitting, and improves generalisation.
+Data augmentation helps reduce overfitting, and improves generalization.
 
 ---
 
-# PyTorch: Data Augmentation with `torchvision.transforms` (V2)
+# PyTorch: Data Augmentation
 
 ```python {2,5,6}
 import torch
@@ -260,7 +311,50 @@ transforms = v2.Compose([
 
 ---
 
-# Optizimers
+# Optimizers
+
+SDG takes small, regular steps:
+
+$$
+    \theta_{t} = \theta_{t-1} - \eta \nabla_{\theta_{t-1}} \mathcal{L}(\theta_{t-1})
+$$
+
+<v-click>
+
+Momentum optimization adds inertia to the motion through weight space:
+$$
+    \mathbf{m}_t = - \eta \nabla_{\theta_{t-1}} \mathcal{L}(\theta_{t-1}) - \beta\mathbf{m}_{t-1}
+$$
+
+$$
+    \theta_{t} = \theta_{t-1} + \mathbf{m}_t 
+$$
+
+</v-click>
+
+---
+
+# Adaptive Learning Rate
+
+A fixed learning (`lr`) rate might not be optimal for the whole training.
+* Adjust `lr` based on the number of epochs
+* Adjust `lr` based on validation metrics
+
+```python {all|1,4|13}
+from torch.optim.lr_scheduler import ExponentialLR
+
+optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.9)
+scheduler = ExponentialLR(optimizer, gamma=0.9)
+
+for epoch in range(20):
+    for input, target in dataset:
+        optimizer.zero_grad()
+        output = model(input)
+        loss = loss_fn(output, target)
+        loss.backward()
+        optimizer.step()
+    scheduler.step()
+```
 
 ---
 
@@ -314,18 +408,18 @@ model.apply(custom_weights_init)
 
 ---
 
-# Transfer Learning and Fine Tuning: Motivation
+# Transfer Learning and Fine-Tuning: Motivation
 
 * Training a deep learning model can be very expensive
 * Many tasks are closely related
 * Some data sets are too small to train a performant deep learning model
 * Random initialization is far from optimal
 
-Transfer learning and fine tuning aim at re-using pre-trained models and fine tune them for the specific task at hand.
+Transfer learning and fine-tuning aim at re-using pre-trained models and fine tune them for the specific task at hand.
 
 ---
 
-# Transfer Learning and Fine Tuning: CNN example
+# Transfer Learning and Fine-Tuning: CNN example
 
 CNNs for classification have two conceptual building blocks:
 
@@ -336,7 +430,7 @@ Feature extraction layers can be re-used from successfully trained models, while
 
 ---
 
-# PyTorch: Load `torchvision` Pretrained Models
+# PyTorch: Load `torchvision` Pre-Trained Models
 
 ```python {all|3-5|7-8}
 from torchvision.models import resnet50, ResNet50_Weights
@@ -362,7 +456,7 @@ for param in model_conv.parameters():
 
 ---
 
-# PyTorch: Overwrite Pretrained Layers
+# PyTorch: Overwrite Pre-Trained Layers
 
 <div grid="~ cols-2 gap-4">
 <div>
@@ -407,14 +501,14 @@ model[-1] = nn.Linear(n_in_features, 5)
 
 # PyTorch Ecosystem
 
-Hyper-parameters can have a huge impact on the model, and the hyperparameter space is large.
+Hyperparameters can have a huge impact on the model, and the hyperparameter space is large.
 
 * Ray Tune (https://docs.ray.io)
 * Optuna (https://optuna.org)
 * Hyperopt (http://hyperopt.github.io/hyperopt/)
 * ...
 
-PyTorch is rather bare-bones. There are many library built on top of it which require to write less code:
+PyTorch is rather bare-bones. There are many libraries built on top of it which require to write less code:
 
 * PyTorch Ignite (https://pytorch-ignite.ai)
 * PyTorch Lightning (https://lightning.ai/pytorch-lightning)
@@ -478,7 +572,7 @@ score = model.evaluate(
 
 ---
 
-# \[lab\] Regularization, Data Augmentation, and Transfer Learning
+# \[LAB\] Regularization, Data Augmentation, and Transfer Learning
 
 Regularization and data augmentation:
 
@@ -486,7 +580,7 @@ Regularization and data augmentation:
 * Train a CNN with and without data augmentation
 * Save and load model weights (early stopping)
 
-Transfer learning:
+Transfer learning (optional):
 
 * Modify VGG-19 to work with only 5 classes
 * Freeze retained VGG-19 parameters

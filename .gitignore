@@ -8,3 +8,4 @@ data/
 .DS_Store
 
 slides/src/.cache/
+slides/src/.pnpm-store/
