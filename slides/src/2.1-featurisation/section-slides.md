@@ -39,7 +39,7 @@ transform = transforms.Compose([
 
 ---
 
-# Images: 1D vs 2D repreaentation
+# Images: 1D vs 2D Representation
 
 <img src="./imgs/2D_to_1D.png" class="h-60"/>
 
@@ -188,16 +188,4 @@ torch.nn.Conv2d(
 
 `padding="same"` automatically adds padding to keep the output size the same as the input size.
 
----
-layout: section
----
-
-# Working with Text
-
----
-
-# TODO
-
-@Rafael
-
----
+--- 
