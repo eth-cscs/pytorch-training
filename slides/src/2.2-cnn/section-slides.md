@@ -519,7 +519,7 @@ loss = nn.NLLLoss()
 
 ---
 
-# [lab] CNN for Image Classification of CIFAR-10
+# \[LAB\] CNN for Image Classification of CIFAR-10
 
 Implement and train a CNN from scratch for image classification:
 

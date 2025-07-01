@@ -282,7 +282,7 @@ $$
 
 <v-click>
 
-Momentum optimization:
+Momentum optimization adds inertia to the motion through weight space:
 $$
     \mathbf{m}_t = - \eta \nabla_{\theta_{t-1}} \mathcal{L}(\theta_{t-1}) - \beta\mathbf{m}_{t-1}
 $$
@@ -295,7 +295,7 @@ $$
 
 ---
 
-# Adaptive Lrarning Rate
+# Adaptive Learning Rate
 
 A fixed learning (`lr`) rate might not be optimal for the whole training.
 * Adjust `lr` based on the number of epochs
@@ -369,18 +369,18 @@ model.apply(custom_weights_init)
 
 ---
 
-# Transfer Learning and Fine Tuning: Motivation
+# Transfer Learning and Fine-Tuning: Motivation
 
 * Training a deep learning model can be very expensive
 * Many tasks are closely related
 * Some data sets are too small to train a performant deep learning model
 * Random initialization is far from optimal
 
-Transfer learning and fine tuning aim at re-using pre-trained models and fine tune them for the specific task at hand.
+Transfer learning and fine-tuning aim at re-using pre-trained models and fine tune them for the specific task at hand.
 
 ---
 
-# Transfer Learning and Fine Tuning: CNN example
+# Transfer Learning and Fine-Tuning: CNN example
 
 CNNs for classification have two conceptual building blocks:
 
@@ -391,7 +391,7 @@ Feature extraction layers can be re-used from successfully trained models, while
 
 ---
 
-# PyTorch: Load `torchvision` Pretrained Models
+# PyTorch: Load `torchvision` Pre-Trained Models
 
 ```python {all|3-5|7-8}
 from torchvision.models import resnet50, ResNet50_Weights
@@ -417,7 +417,7 @@ for param in model_conv.parameters():
 
 ---
 
-# PyTorch: Overwrite Pretrained Layers
+# PyTorch: Overwrite Pre-Trained Layers
 
 <div grid="~ cols-2 gap-4">
 <div>
@@ -462,7 +462,7 @@ model[-1] = nn.Linear(n_in_features, 5)
 
 # PyTorch Ecosystem
 
-Hyper-parameters can have a huge impact on the model, and the hyperparameter space is large.
+Hyperparameters can have a huge impact on the model, and the hyperparameter space is large.
 
 * Ray Tune (https://docs.ray.io)
 * Optuna (https://optuna.org)
@@ -533,7 +533,7 @@ score = model.evaluate(
 
 ---
 
-# \[lab\] Regularization, Data Augmentation, and Transfer Learning
+# \[LAB\] Regularization, Data Augmentation, and Transfer Learning
 
 Regularization and data augmentation:
 
