@@ -134,6 +134,13 @@ best_model_state = deepcopy(model.state_dict())
 
 We can add constraints on the model (model weights) via the loss function.
 
+This regularization puts constraints on the model weights:
+
+* $L_2$ regularization encourages decay towards zero unless supported by data
+* $L_1$ regularization encourages sparsity (many weights close to zero)
+
+Controlling the model complexity by regularization has similar effects as reducing the model capacity (number of parameters).
+
 ---
 
 # PyTorch: $L_2$ Regularization
@@ -229,6 +236,50 @@ model.eval()
 
 ---
 
+# Skip Connections and Residual Learning
+
+<div grid="~ cols-2 gap-4">
+<div>
+
+<img src="./imgs/skip_connection.png" class="h-60"/>
+
+* Speed-up training
+* Facilitate signal propagation
+* Reduce vanishing/exploding gradients problem
+
+<div class="text-xs text-center mt-8">
+Géron, Aurélien. Hands-on machine learning with Scikit-Learn, Keras, and TensorFlow, O’Reilly Media, Inc., 2022
+</div>
+
+
+</div>
+<div>
+
+```python {all|3,12}
+# torchvision/models/resnet.py
+def forward(self, x):
+  identity = x
+
+  out = self.conv1(x)
+  out = self.bn1(out)
+  out = self.relu(out)
+
+  out = self.conv2(out)
+  out = self.bn2(out)
+
+  out += identity
+  out = self.relu(out)
+
+  return out
+```
+
+Here we can't use `nn.Sequential`.
+
+</div>
+</div>
+
+---
+
 # Data Augmentation
 
 Data augmentation artificially inflates the size of the training set by
@@ -262,15 +313,11 @@ transforms = v2.Compose([
 
 # Optimizers
 
-<v-click>
-
 SDG takes small, regular steps:
 
 $$
     \theta_{t} = \theta_{t-1} - \eta \nabla_{\theta_{t-1}} \mathcal{L}(\theta_{t-1})
 $$
-
-</v-click>
 
 <v-click>
 

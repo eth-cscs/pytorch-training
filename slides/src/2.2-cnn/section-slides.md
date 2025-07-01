@@ -142,7 +142,7 @@ $(5 \times 5 \times 3 + 1) \times 200 = 15,200$ parameters!
 <div grid="~ cols-2 gap-4">
 <div>
 
-![CNN](./imgs/lenet.png)
+![CNN](./imgs/lenet-cropped.png)
 
 </div>
 <div>
@@ -159,6 +159,11 @@ $(5 \times 5 \times 3 + 1) \times 200 = 15,200$ parameters!
 
 </div>
 </div>
+
+CNNs for classification have two conceptual building blocks:
+
+* Feature extractor (convolution layers)
+* Classifier (linear layers)
 
 <div class="text-xs text-center mt-8">
 https://github.com/HarisIqbal88/PlotNeuralNet
@@ -447,7 +452,7 @@ $$
 \mathcal{L} = -\frac{1}{N} \sum_{i=1}^{N} \left( y_i \log(p_i) + (1 - y_i) \log(1 - p_i) \right)
 $$
 
-```python
+```python {3,5}
 def forward(self, x):
     # ...
     return torch.sigmoid(x)
@@ -504,7 +509,6 @@ loss = nn.NLLLoss()
 </div>
 
 ---
-
 
 # What have we missed?
 
