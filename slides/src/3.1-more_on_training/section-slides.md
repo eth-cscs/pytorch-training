@@ -134,7 +134,7 @@ best_model_state = deepcopy(model.state_dict())
 
 We can add constraints on the model (model weights) via the loss function.
 
-This regularization puts constraints on the model weights:
+Regularization puts constraints on the model weights:
 
 * $L_2$ regularization encourages decay towards zero unless supported by data
 * $L_1$ regularization encourages sparsity (many weights close to zero)
