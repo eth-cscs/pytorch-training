@@ -187,5 +187,3 @@ torch.nn.Conv2d(
 ```
 
 `padding="same"` automatically adds padding to keep the output size the same as the input size.
-
---- 
