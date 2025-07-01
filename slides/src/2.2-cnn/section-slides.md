@@ -434,14 +434,14 @@ Many CNN architectures:
   * Local response normalization
 * VGG16/VGG19 (runner-up of ImageNet 2014)
 * ResNet (winner of ImageNet 2015)
-  * Batch normalisation
+  * Batch normalization
   * Residual connections
   
 ---
 
 # Binary Classification
 
-Classify images into two classes. The model predict the probablity $p_i$ of one class.
+Classify images into two classes. The model predict the probability $p_i$ of one class.
 
 $$
 \mathcal{L} = -\frac{1}{N} \sum_{i=1}^{N} \left( y_i \log(p_i) + (1 - y_i) \log(1 - p_i) \right)
@@ -508,10 +508,10 @@ loss = nn.NLLLoss()
 
 # What have we missed?
 
-* Classification and localisation
+* Classification and localization
   * Regression problem for bounding boxes
 * Object detection
-  * Classification and localisation for multiple objects
+  * Classification and localization for multiple objects
 * Semantic segmentation
   * Classification for each pixel (car, road, sky, etc.)
 * Vision Transformers (ViT)
@@ -519,7 +519,7 @@ loss = nn.NLLLoss()
 
 ---
 
-# [lab] CNN for Image Classifiaction of CIFAR-10
+# [lab] CNN for Image Classification of CIFAR-10
 
 Implement and train a CNN from scratch for image classification:
 

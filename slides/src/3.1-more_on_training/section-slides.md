@@ -150,7 +150,7 @@ $$
 L_2 = \lambda \sum_{i} w_i^2
 $$
 
-The $L_2$ regularisation term is available in PyTorch via the `weight_decay` argument of the optimizer.
+The $L_2$ regularization term is available in PyTorch via the `weight_decay` argument of the optimizer.
 
 ---
 
@@ -160,7 +160,7 @@ $$
 L_1 = \lambda \sum_{i} |w_i|
 $$
 
-The $L_1$ regularisation term produces a sparse model (many weights close to zero).
+The $L_1$ regularization term produces a sparse model (many weights close to zero).
 
 This term is not available in PyTorch optimizers, but can be implemented manually.
 
@@ -213,15 +213,19 @@ Dropout layers randomly zero some elements of the input with probability $p$.
 
 The output is scaled by $1/(1-p)$.
 
-<AdmonitionType type="caution" width="300px">
-Add image about dropout layers.
-</AdmonitionType>
+
+```python
+nn.Dropout(p=0.5)
+```
+
+<img src="./imgs/dropout.png"/>
+
 
 ---
 
 # Training and Evaluation Phases
 
-Some layers behave differently during training and evaluation (dropout, batch normalisation, ...).
+Some layers behave differently during training and evaluation (dropout, batch normalization, ...).
 
 ```python
 model.train()
@@ -244,7 +248,7 @@ transforming the data (on-the-fly) at each iteration.
 * Random crops
 * ...
 
-Data augmentation helps reducing overfitting, and improves generalisation.
+Data augmentation helps reduce overfitting, and improves generalization.
 
 ---
 
@@ -465,7 +469,7 @@ Hyper-parameters can have a huge impact on the model, and the hyperparameter spa
 * Hyperopt (http://hyperopt.github.io/hyperopt/)
 * ...
 
-PyTorch is rather bare-bones. There are many library built on top of it which require to write less code:
+PyTorch is rather bare-bones. There are many libraries built on top of it which require to write less code:
 
 * PyTorch Ignite (https://pytorch-ignite.ai)
 * PyTorch Lightning (https://lightning.ai/pytorch-lightning)
@@ -537,7 +541,7 @@ Regularization and data augmentation:
 * Train a CNN with and without data augmentation
 * Save and load model weights (early stopping)
 
-Transfer learning:
+Transfer learning (optional):
 
 * Modify VGG-19 to work with only 5 classes
 * Freeze retained VGG-19 parameters
