@@ -6,14 +6,6 @@ layout: section
 
 ---
 
-# Bias-Variance Tradeoff
-
-<AdmonitionType type="caution" width="300px">
-Add discussion about bias-variance tradeoff?
-</AdmonitionType>
-
----
-
 # Overfitting
 
 Overfitting happens when a model has too many parameters compared to the training data.
