@@ -18,12 +18,16 @@ Add discussion about bias-variance tradeoff?
 
 Overfitting happens when a model has too many parameters compared to the training data.
 
+$$
+  f(x) \approx \sum_i w_i x^i
+$$
+
 <style>
     img {
         margin: auto;
     }
 </style>
-<img src="./imgs/polyfit.png" class="h-90" style="margin"/>
+<img src="./imgs/polyfit.png" class="h-75" style="margin"/>
 
 ---
 
@@ -37,11 +41,11 @@ Overfitting happens when a model has too many parameters compared to the trainin
 </div>
 <div>
 
-Low training loss and hight validation loss indicate overfitting.
+Low training loss and high validation loss indicate overfitting.
 
-The large gap represents the generalisation error.
+The large gap represents the generalization error.
 
-The model was perfmorming better early on in the training, but then started to overfit.
+The model was performing better early on in the training, but then started to overfit.
 
 </div>
 </div>
@@ -244,7 +248,7 @@ Data augmentation helps reducing overfitting, and improves generalisation.
 
 ---
 
-# PyTorch: Data Augmentation with `torchvision.transforms` (V2)
+# PyTorch: Data Augmentation
 
 ```python {2,5,6}
 import torch
@@ -260,7 +264,54 @@ transforms = v2.Compose([
 
 ---
 
-# Optizimers
+# Optimizers
+
+<v-click>
+
+SDG takes small, regular steps:
+
+$$
+    \theta_{t} = \theta_{t-1} - \eta \nabla_{\theta_{t-1}} \mathcal{L}(\theta_{t-1})
+$$
+
+</v-click>
+
+<v-click>
+
+Momentum optimization:
+$$
+    \mathbf{m}_t = - \eta \nabla_{\theta_{t-1}} \mathcal{L}(\theta_{t-1}) - \beta\mathbf{m}_{t-1}
+$$
+
+$$
+    \theta_{t} = \theta_{t-1} + \mathbf{m}_t 
+$$
+
+</v-click>
+
+---
+
+# Adaptive Lrarning Rate
+
+A fixed learning (`lr`) rate might not be optimal for the whole training.
+* Adjust `lr` based on the number of epochs
+* Adjust `lr` based on validation metrics
+
+```python {all|1,4|13}
+from torch.optim.lr_scheduler import ExponentialLR
+
+optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.9)
+scheduler = ExponentialLR(optimizer, gamma=0.9)
+
+for epoch in range(20):
+    for input, target in dataset:
+        optimizer.zero_grad()
+        output = model(input)
+        loss = loss_fn(output, target)
+        loss.backward()
+        optimizer.step()
+    scheduler.step()
+```
 
 ---
 

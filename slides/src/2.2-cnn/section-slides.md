@@ -67,7 +67,9 @@ layout: section
 How many parameters (connections) are there between the input and fist hidden layer?
 
 <v-click>
+
 $100 \times 100 \times 1000 = 10,000,000$ parameters!
+
 </v-click>
 
 ---
@@ -455,16 +457,13 @@ loss = nn.BCELoss()
 
 --- 
 
-
---- 
-
 # Multi-Class Classification: Probabilities
 
 Classify images into multiple classes. The output of the model, a vector of $N$ classes,
 can be converted to a probability distribution.
 
 $$
-  \text{softmax(x_i)} = \frac{e^{x_i}}{\sum_{j=1}^{C} e^{x_j}}
+  \text{softmax}(x_i) = \frac{e^{x_i}}{\sum_{j=1}^{C} e^{x_j}}
 $$
 
 The model predict the probability $p_{ij}$ for each class $j$ of sample $i$.
@@ -473,7 +472,7 @@ The model predict the probability $p_{ij}$ for each class $j$ of sample $i$.
 
 # Multi-Class Classification: Loss Function
 
-Generalisation of the binary cross-entropy loss function to multiple classes:
+Generalization of the binary cross-entropy loss function to multiple classes:
 
 $$
 \mathcal{L} = -\frac{1}{N} \sum_{i=1}^{N} \sum_{j=1}^{C} y_{ij} \log(p_{ij})
