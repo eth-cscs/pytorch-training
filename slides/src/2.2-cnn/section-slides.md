@@ -452,6 +452,11 @@ $$
 \mathcal{L} = -\frac{1}{N} \sum_{i=1}^{N} \left( y_i \log(p_i) + (1 - y_i) \log(1 - p_i) \right)
 $$
 
+
+<div grid="~ cols-2 gap-4">
+<div>
+
+
 ```python {5,7}
 import torch.nn.functional as F
 
@@ -461,6 +466,22 @@ def forward(self, x):
 
 loss = nn.BCELoss()
 ```
+
+</div>
+<div>
+
+```python {5,7}
+import torch.nn.functional as F
+
+def forward(self, x):
+    # ...
+    return self.linear_layer(x)
+
+loss = nn.BCEWithLogitsLoss()
+```
+
+</div>
+</div>
 
 --- 
 
@@ -493,7 +514,7 @@ import torch.nn.functional as F
 
 def forward(self, x):
     # ...
-    return F.softmax(x, dim=1)
+    return self.linar_layer(x)
 
 loss = nn.CrossEntropyLoss()
 ```

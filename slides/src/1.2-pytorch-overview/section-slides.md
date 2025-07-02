@@ -262,7 +262,7 @@ with torch.no_grad():
 - Disables autograd inside the block
 - No computation graph is created
 - Reduces memory + improves speed
-- `model.eval()` disables Dropout, BatchNorm updates
+- `model.eval()` disables `Dropout`, `BatchNorm` updates
 
 </v-clicks>
 
@@ -502,7 +502,7 @@ nsys profile -o output_report python train.py
 ```
 
 - Collects timeline, kernel launches, CPU–GPU syncs
-- Outputs .qdrep or .nsys-rep for use in GUI
+- Outputs `.qdrep` or `.nsys-rep` for use in GUI
 
 Optional flags:
 ```bash
