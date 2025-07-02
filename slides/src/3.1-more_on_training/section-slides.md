@@ -151,6 +151,16 @@ $$
 
 The $L_2$ regularization term is available in PyTorch via the `weight_decay` argument of the optimizer.
 
+```python {6}
+import torch.optim as optim
+
+optimizer = optim.SGD(
+    model.parameters(), 
+    lr=0.001, 
+    weight_decay=0.01
+)
+```
+
 ---
 
 # PyTorch: $L_1$ Regularization
