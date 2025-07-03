@@ -1,0 +1,9 @@
+image = "/capstor/store/cscs/cscs/jupyter/pytorch/pytorch-course-tf-25.05-py3.sqsh"
+mounts = ["/capstor:/capstor", "/iopsstor:/iopsstor"]
+workdir = "/capstor/scratch/cscs/${USER}/pytorch-training/notebooks/distributed/.solution"
+entrypoint = false
+writable = true
+
+[annotations]
+com.hooks.aws_ofi_nccl.enabled = "true"
+com.hooks.aws_ofi_nccl.variant = "cuda12"
