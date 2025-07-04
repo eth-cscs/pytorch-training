@@ -36,7 +36,6 @@ jobs:
         run: |
           npm i -g pnpm
           pnpm install
-          pnpm add -D playwright-chromium
 
       - name: Build Slidev
         run: pnpm build --base /${{github.event.repository.name}}/slides/ --out ../../dist/slides
@@ -50,7 +49,7 @@ jobs:
           path: dist
 
       - name: Build PDF
-        run: slidev export
+        run:  pnpm run slidev -- export
 
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
