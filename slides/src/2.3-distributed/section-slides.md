@@ -12,7 +12,7 @@ level: 2
 
 - Training deep neural networks is computationally expensive
 - Models can be very large 
-  - e.g. GPT-3 has 175 billion parameters
+  - e.g. Deepseek R1 has ~ 670 billion parameters
   - We need to store the model parameters in memory
   - Will not fit in a single GPU memory
 
