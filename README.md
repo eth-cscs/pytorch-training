@@ -18,7 +18,11 @@ The lessons will blend theory with hands-on practice, using [PyTorch] for practi
 
 [View slides](https://eth-cscs.github.io/pytorch-training/slides/)
 
+A PDF version of the slides can be downloaded by going to the [Actions] tab,
+selecting the latest workflow run, and downloading the `eth-cscs-pytorch-training.pdf` artifact.
+
 [Hands-on Introduction to Deep Learning with PyTorch]: https://www.cscs.ch/publications/news/course-hands-on-introduction-to-deep-learning-with-pytorch
 [PyTorch]: https://pytorch.org/
 [CSCS]: https://www.cscs.ch/
 [Piz Daint]: https://www.cscs.ch/computers/alps
+[Actions]: https://github.com/eth-cscs/pytorch-training/actions

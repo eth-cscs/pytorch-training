@@ -46,6 +46,17 @@ jobs:
         with:
           path: dist
 
+      - name: Build PDF
+        run: |
+          pnpm exec playwright install
+          pnpm export --output /tmp/eth-cscs-pytorch-training.pdf --format pdf --dark
+
+      - name: Upload PDF artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: eth-cscs-pytorch-training.pdf
+          path: /tmp/eth-cscs-pytorch-training.pdf
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
