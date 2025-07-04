@@ -19,13 +19,11 @@
     "@iconify-json/uim": "^1.1.9",
     "@iconify/json": "^2.2.221",
     "@iconify/vue": "^4.1.2"
+    "playwright-chromium": "^1.51.0"
   },
   "pnpm": {
     "overrides": {
       "monaco-editor": "0.51.0"
     }
   },
-  "devDependencies": {
-    "playwright-chromium": "^1.51.0"
-  }
 }
