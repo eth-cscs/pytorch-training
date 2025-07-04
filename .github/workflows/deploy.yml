@@ -51,13 +51,13 @@ jobs:
       - name: Build PDF
         run: |
           pnpm exec playwright install
-          pnpm export
+          pnpm export --output ../../dist/eth-cscs-pytorch-training.pdf --pdf
 
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
         with:
           name: eth-cscs-pytorch-training.pdf
-          path: ./slides-export.pdf
+          path: ../../dist/eth-cscs-pytorch-training.pdf
 
   deploy:
     needs: build
