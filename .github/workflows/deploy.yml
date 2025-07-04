@@ -51,7 +51,7 @@ jobs:
       - name: Build PDF
         run: |
           pnpm exec playwright install
-          pnpm export --output /tmp/eth-cscs-pytorch-training.pdf --format pdf --dark --with-toc
+          pnpm export --output /tmp/eth-cscs-pytorch-training.pdf --format pdf --dark
 
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
